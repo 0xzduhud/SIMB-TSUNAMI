@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIMB Tsunami - Sistem Informasi Manajemen Bencana Tsunami</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <!-- Ikon FontAwesome via CSS CDN -->
+    <link rel="stylesheet" href="styles.css"> <!-- Link ke CSS terpisah -->
+</head>
+<body>
+    <!-- Header/Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#"><i class="fas fa-water"></i> SIMB Tsunami</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#home">Beranda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#tentang">Tentang Tsunami</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#penanggulangan">Penanggulangan</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#kontak">Kontak</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Banner/Slider dengan Efek Gelombang -->
+    <section id="home" class="hero text-white text-center py-5 position-relative">
+        <div class="wave-bg"></div>
+        <div class="container position-relative">
+            <h1 class="display-4">Sistem Informasi Manajemen Bencana Tsunami</h1>
+            <p class="lead">Lindungi diri dan keluarga Anda dari ancaman tsunami. Klik untuk informasi detail!</p>
+        </div>
+    </section>
+
+    <!-- Konten Utama dengan Cards -->
+    <div class="container my-5">
+        <div class="row">
+            <!-- Card 1: Tentang Tsunami -->
+            <div class="col-md-6 mb-4">
+                <div class="card tsunami-card h-100">
+                    <img src="https://source.unsplash.com/400x250/?tsunami-cause" class="card-img-top" alt="Penyebab Tsunami">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-exclamation-triangle"></i> Tentang Tsunami</h5>
+                        <p class="card-text">Pelajari penyebab, dampak, dan risiko tsunami di Indonesia. Tsunami bisa datang kapan saja!</p>
+                        <button class="btn btn-primary tsunami-btn" data-bs-toggle="modal" data-bs-target="#modalTentang">Baca Lebih Lanjut</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Card 2: Penanggulangan -->
+            <div class="col-md-6 mb-4">
+                <div class="card tsunami-card h-100">
+                    <img src="https://source.unsplash.com/400x250/?tsunami-evacuation" class="card-img-top" alt="Evakuasi Tsunami">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-shield-alt"></i> Penanggulangan Tsunami</h5>
+                        <p class="card-text">Langkah-langkah praktis untuk persiapan, evakuasi, dan pemulihan. Jaga keselamatan Anda!</p>
+                        <button class="btn btn-primary tsunami-btn" data-bs-toggle="modal" data-bs-target="#modalPenanggulangan">Pelajari Sekarang</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bagian Tambahan: Tips Cepat -->
+        <section class="my-5">
+            <h2 class="text-center mb-4 tsunami-title">Tips Cepat Penanggulangan Tsunami</h2>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-running tsunami-icon"></i>
+                    <h5>Evakuasi Segera</h5>
+                    <p>Jika ada gempa, lari ke tempat tinggi tanpa menunggu gelombang.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-kit-medical tsunami-icon"></i>
+                    <h5>Siapkan Tas Darurat</h5>
+                    <p>Air, makanan, obat, dan dokumen penting selalu siap.</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <i class="fas fa-broadcast-tower tsunami-icon"></i>
+                    <h5>Dengarkan Peringatan</h5>
+                    <p>Ikuti info dari BMKG via radio atau aplikasi.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Modals untuk Detail -->
+    <!-- Modal Tentang Tsunami -->
+    <div class="modal fade" id="modalTentang" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header tsunami-modal-header">
+                    <h5 class="modal-title"><i class="fas fa-info-circle"></i> Detail Tentang Tsunami</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://source.unsplash.com/600x300/?tsunami-detail" alt="Detail Tsunami" class="img-fluid mb-3">
+                    <h6>Apa Itu Tsunami?</h6>
+                    <p>Tsunami adalah gelombang laut raksasa yang disebabkan oleh perubahan mendadak di dasar laut, seperti gempa bumi tektonik, letusan gunung berapi bawah laut, atau longsor. Gelombang ini bisa mencapai kecepatan 800 km/jam di laut dalam dan tinggi hingga 30 meter saat mendekati pantai.</p>
+                    <h6>Penyebab Utama:</h6>
+                    <ul>
+                        <li>Gempa bumi di zona subduksi (seperti di Jepang atau Aceh).</li>
+                        <li>Letusan vulkanik bawah laut (misal, Krakatau).</li>
+                        <li>Longsor atau tanah longsor di bawah air.</li>
+                    </ul>
+                    <h6>Dampak dan Risiko:</h6>
+                    <p>Dapat menyebabkan banjir, kerusakan bangunan, korban jiwa, dan polusi. Indonesia, sebagai negara kepulauan di Ring of Fire, memiliki risiko tinggi. Contoh: Tsunami Aceh 2004 menewaskan 230.000 orang.</p>
+                    <p><strong>Sumber:</strong> BMKG, BNPB.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Penanggulangan -->
+    <div class="modal fade" id="modalPenanggulangan" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header tsunami-modal-header">
+                    <h5 class="modal-title"><i class="fas fa-tools"></i> Detail Penanggulangan Tsunami</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <img src="https://source.unsplash.com/600x300/?tsunami-preparedness" alt="Penanggulangan Tsunami" class="img-fluid mb-3">
+                    <h6>Persiapan Sebelum Tsunami:</h6>
+                    <ul>
+                        <li>Buat rencana evakuasi keluarga dan latihan rutin.</li>
+                        <li>Siapkan tas darurat: air minum (2 liter/hari), makanan tahan lama, obat-obatan, senter, radio baterai, dan dokumen.</li>
+                        <li>Kenali jalur evakuasi dan titik kumpul tinggi (minimal 30 meter).</li>
+                        <li>Pasang aplikasi peringatan seperti InaRISK atau ikuti BMKG.</li>
+                    </ul>
+                    <h6>Saat Peringatan Diterima:</h6>
+                    <ul>
+                        <li>Dengarkan sirene atau pesan resmi; jangan panik.</li>
+                        <li>Jika gempa kuat (>6 SR), segera evakuasi ke tempat aman.</li>
+                        <li>Hindari pantai, sungai, dan lembah; gelombang bisa masuk jauh.</li>
+                        <li>Bantu orang tua, anak, dan penyandang disabilitas.</li>
+                    </ul>
+                    <h6>Setelah Tsunami:</h6>
+                    <ul>
+                        <li>Tunggu konfirmasi "aman" dari otoritas sebelum kembali.</li>
+                        <li>Bantu korban tapi hindari area berbahaya (listrik, bangunan runtuh).</li>
+                        <li>Laporkan kerusakan dan ikuti program pemulihan.</li>
+                        <li>Periksa kesehatan mental dan fisik pasca-bencana.</li>
+                    </ul>
+                    <p><strong>Tips Tambahan:</strong> Belajar CPR, simpan ponsel charged, dan ajari anak cara menghubungi darurat. Kunjungi situs BMKG untuk simulasi.</p>
+                    <p><strong>Sumber:</strong> BMKG, BNPB, WHO.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white text-center py-3">
+        <div class="container">
+            <p>&copy; 2023 SIMB Tsunami. Dibuat untuk Edukasi. <a href="#kontak" class="text-info">Kontak Kami</a> | Sumber: BMKG & BNPB</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS (untuk modal dan navbar, bawaan Bootstrap) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
