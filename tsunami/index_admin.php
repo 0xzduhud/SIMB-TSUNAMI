@@ -3,10 +3,10 @@ include "koneksi.php";
 session_start();
 
 // Cek apakah user sudah login sebagai admin
-// if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
-//     header("Location: admin_login.php");
-//     exit();
-// }
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: admin_login.php");
+    exit();
+} 
 
 // Query untuk mengambil data dari database
 $query_incidents = "SELECT * FROM kejadian ORDER BY tanggal DESC";
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_incident'])) {
     
     if (mysqli_query($conn, $query)) {
         $_SESSION['success_message'] = "Kejadian berhasil ditambahkan!";
-        header("Location: admin_dashboard.php");
+        header("Location: index_admin.php");
         exit();
     } else {
         $_SESSION['error_message'] = "Error: " . mysqli_error($conn);
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_incident'])) {
     
     if (mysqli_query($conn, $query)) {
         $_SESSION['success_message'] = "Kejadian berhasil diperbarui!";
-        header("Location: admin_dashboard.php");
+        header("Location: index_admin.php");
         exit();
     } else {
         $_SESSION['error_message'] = "Error: " . mysqli_error($conn);
@@ -92,7 +92,7 @@ if (isset($_GET['delete_incident'])) {
     
     if (mysqli_query($conn, $query)) {
         $_SESSION['success_message'] = "Kejadian berhasil dihapus!";
-        header("Location: admin_dashboard.php");
+        header("Location: index_admin.php");
         exit();
     } else {
         $_SESSION['error_message'] = "Error: " . mysqli_error($conn);
@@ -114,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_article'])) {
     
     if (mysqli_query($conn, $query)) {
         $_SESSION['success_message'] = "Artikel berhasil ditambahkan!";
-        header("Location: admin_dashboard.php");
+        header("Location: index_admin.php");
         exit();
     } else {
         $_SESSION['error_message'] = "Error: " . mysqli_error($conn);
@@ -143,7 +143,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['edit_article'])) {
     
     if (mysqli_query($conn, $query)) {
         $_SESSION['success_message'] = "Artikel berhasil diperbarui!";
-        header("Location: admin_dashboard.php");
+        header("Location: index_admin.php");
         exit();
     } else {
         $_SESSION['error_message'] = "Error: " . mysqli_error($conn);
@@ -165,7 +165,7 @@ if (isset($_GET['delete_article'])) {
     
     if (mysqli_query($conn, $query)) {
         $_SESSION['success_message'] = "Artikel berhasil dihapus!";
-        header("Location: admin_dashboard.php");
+        header("Location: index_admin.php");
         exit();
     } else {
         $_SESSION['error_message'] = "Error: " . mysqli_error($conn);
@@ -179,7 +179,7 @@ if (isset($_GET['delete_volunteer'])) {
     
     if (mysqli_query($conn, $query)) {
         $_SESSION['success_message'] = "Volunteer berhasil dihapus!";
-        header("Location: admin_dashboard.php");
+        header("Location: index_admin.php");
         exit();
     } else {
         $_SESSION['error_message'] = "Error: " . mysqli_error($conn);
@@ -1031,10 +1031,10 @@ unset($_SESSION['error_message']);
                       <td><span class='status-badge {$status_class}'>{$status_text}</span></td>
                       <td>
                         <div class='action-buttons'>
-                          <a href='admin_dashboard.php?edit_incident={$row['id_kejadian']}' class='btn btn-primary btn-sm'>
+                          <a href='index_admin.php?edit_incident={$row['id_kejadian']}' class='btn btn-primary btn-sm'>
                             <i class='fas fa-edit'></i> Edit
                           </a>
-                          <a href='admin_dashboard.php?delete_incident={$row['id_kejadian']}' class='btn btn-danger btn-sm' onclick=\"return confirm('Apakah Anda yakin ingin menghapus kejadian ini?')\">
+                          <a href='index_admin.php?delete_incident={$row['id_kejadian']}' class='btn btn-danger btn-sm' onclick=\"return confirm('Apakah Anda yakin ingin menghapus kejadian ini?')\">
                             <i class='fas fa-trash'></i> Hapus
                           </a>
                         </div>
@@ -1065,7 +1065,7 @@ unset($_SESSION['error_message']);
         </button>
       </div>
       
-      <form id="incident-form" method="POST" action="admin_dashboard.php">
+      <form id="incident-form" method="POST" action="index_admin.php">
         <?php if (isset($incident_to_edit)): ?>
             <input type="hidden" id="id_kejadian" name="id_kejadian" value="<?php echo $incident_to_edit['id_kejadian']; ?>">
         <?php endif; ?>
@@ -1166,10 +1166,10 @@ unset($_SESSION['error_message']);
                       <td>" . date('d M Y', strtotime($row['tanggal_publikasi'])) . "</td>
                       <td>
                         <div class='action-buttons'>
-                          <a href='admin_dashboard.php?edit_article={$row['id_artikel']}' class='btn btn-primary btn-sm'>
+                          <a href='index_admin.php?edit_article={$row['id_artikel']}' class='btn btn-primary btn-sm'>
                             <i class='fas fa-edit'></i> Edit
                           </a>
-                          <a href='admin_dashboard.php?delete_article={$row['id_artikel']}' class='btn btn-danger btn-sm' onclick=\"return confirm('Apakah Anda yakin ingin menghapus artikel ini?')\">
+                          <a href='index_admin.php?delete_article={$row['id_artikel']}' class='btn btn-danger btn-sm' onclick=\"return confirm('Apakah Anda yakin ingin menghapus artikel ini?')\">
                             <i class='fas fa-trash'></i> Hapus
                           </a>
                         </div>
@@ -1200,7 +1200,7 @@ unset($_SESSION['error_message']);
         </button>
       </div>
       
-      <form method="POST" action="admin_dashboard.php">
+      <form method="POST" action="index_admin.php">
         <?php if (isset($article_to_edit)): ?>
             <input type="hidden" id="id_artikel" name="id_artikel" value="<?php echo $article_to_edit['id_artikel']; ?>">
         <?php endif; ?>
@@ -1315,7 +1315,7 @@ unset($_SESSION['error_message']);
                       <td>{$incident_name}</td>
                       <td>
                         <div class='action-buttons'>
-                          <a href='admin_dashboard.php?delete_volunteer={$row['id_volunteer']}' class='btn btn-danger btn-sm' onclick=\"return confirm('Apakah Anda yakin ingin menghapus volunteer ini?')\">
+                          <a href='index_admin.php?delete_volunteer={$row['id_volunteer']}' class='btn btn-danger btn-sm' onclick=\"return confirm('Apakah Anda yakin ingin menghapus volunteer ini?')\">
                             <i class='fas fa-trash'></i> Hapus
                           </a>
                         </div>
