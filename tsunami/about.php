@@ -838,8 +838,8 @@
           <div class="member" data-aos="zoom-in" data-aos-delay="400">
             <img src="img/founder4.jpg" alt="Kanza Widi Bagaskara" />
             <h4>Kanza Widi Bagaskara</h4>
-            <span class="role">Data Analyst</span>
-            <p>Menganalisis data seismik untuk mendukung pengambilan keputusan tanggap darurat yang lebih efektif.</p>
+            <span class="role">Creative Director</span>
+            <p>bertanggung jawab merancang dan mengarahkan konsep visual serta gaya kreatif website agar konsisten dengan identitas brand.</p>
           </div>
 
           <div class="member" data-aos="zoom-in" data-aos-delay="500">
@@ -939,3 +939,4 @@
   </script>
 </body>
 </html>
+
