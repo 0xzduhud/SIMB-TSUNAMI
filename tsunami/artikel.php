@@ -1,3 +1,47 @@
+<?php
+// Include koneksi database
+include 'koneksi.php';
+
+// Query untuk mengambil data artikel dari database
+$sql_artikel = "SELECT * FROM artikel ORDER BY tanggal_publikasi DESC";
+$result_artikel = $conn->query($sql_artikel);
+
+// Inisialisasi array untuk menyimpan data
+$artikel_data = [];
+
+// Ambil data artikel
+if ($result_artikel && $result_artikel->num_rows > 0) {
+    while($row = $result_artikel->fetch_assoc()) {
+        $artikel_data[] = $row;
+    }
+}
+
+// Jika tidak ada data, gunakan data default
+if (empty($artikel_data)) {
+    $artikel_data = [
+        [
+            'judul' => 'Detik-detik Gempa M 6.9 dan Tsunami Guncang Jepang',
+            'kategori' => 'Berita Utama',
+            'url_gambar' => 'img/jepang.webp',
+            'konten' => 'Gempa bumi berkekuatan magnitudo 6,9 mengguncang Jepang disusul peringatan tsunami. Kejadian ini mengingatkan pentingnya sistem peringatan dini yang efektif untuk menyelamatkan ribuan nyawa.',
+            'link_artikel_eksternal' => 'https://www.cnnindonesia.com/internasional/20240102123435-134-1044566/detik-detik-gempa-m-69-dan-tsunami-guncang-jepang',
+            'tanggal_publikasi' => date('Y-m-d')
+        ],
+        [
+            'judul' => 'Peringatan Tsunami Sedunia Dorong Edukasi dan Kewaspadaan Masyarakat',
+            'kategori' => 'Berita Utama',
+            'url_gambar' => 'img/rri.jpeg',
+            'konten' => 'Peringatan tsunami sedunia mengingatkan pentingnya edukasi dan kewaspadaan masyarakat terhadap potensi bencana tsunami di wilayah pesisir.',
+            'link_artikel_eksternal' => 'https://rri.co.id/ekonomi-dan-bisnis/411259/peringatan-tsunami-sedunia-dorong-edukasi-dan-kewaspadaan-masyarakat',
+            'tanggal_publikasi' => date('Y-m-d', strtotime('-1 day'))
+        ]
+    ];
+}
+
+// Tutup koneksi
+$conn->close();
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -168,7 +212,7 @@
       position: relative;
       height: 50vh;
       background: linear-gradient(135deg, rgba(0, 23, 45, 0.9) 0%, rgba(0, 87, 255, 0.7) 100%), 
-                   url(img/artikel.jpeg);
+                   url('img/artikel.jpeg');
       background-size: cover;
       background-position: center;
       display: flex;
@@ -246,23 +290,22 @@
     }
 
     /* ===== ARTICLE GRID ===== */
+    .read-more {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--primary);
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        margin-top: auto;
+        padding: 8px 16px;
+    }
 
-    /* Style untuk link eksternal */
-.read-more {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--primary);
-    font-weight: 600;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    margin-top: auto;
-    padding: 8px 16px;
-}
+    .read-more:hover {
+        gap: 12px;
+    }
 
-.read-more:hover {
-    gap: 12px;
-}
     .article-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -607,12 +650,12 @@
       <img src="img/tsunamelogo.png" alt="Tsuname Logo" />
     </div>
     <nav class="navbar-links" aria-label="Menu utama">
-      <a href="index_tsunami_user.html">Beranda</a>
-      <a href="riwayat.html">Riwayat</a>
-      <a href="maps2.html">Pantau</a>
-      <a href="artikel.html" style="color: #a9d6ff;">Artikel</a>
-      <a href="volunteer.html">Volunter</a>
-      <a href="about.html">Tentang</a>
+      <a href="index_tsunami_user.php">Beranda</a>
+      <a href="riwayat.php">Riwayat</a>
+      <a href="maps2.php">Pantau</a>
+      <a href="artikel.php" style="color: #a9d6ff;">Artikel</a>
+      <a href="volunteer.php">Volunter</a>
+      <a href="about.php">Tentang</a>
     </nav>
   </header>
 
@@ -640,7 +683,39 @@
 
     <!-- Featured Article -->
     <section class="featured-article" data-aos="fade-up" id="featured-article-container">
-      <!-- Featured article will be loaded dynamically -->
+      <?php if (!empty($artikel_data)): ?>
+        <?php $featured_article = $artikel_data[0]; ?>
+        <div class="featured-content">
+          <span class="article-category"><?php echo htmlspecialchars($featured_article['kategori']); ?></span>
+          <h2><?php echo htmlspecialchars($featured_article['judul']); ?></h2>
+          <p><?php echo htmlspecialchars($featured_article['konten']); ?></p>
+          <div class="article-meta">
+            <div class="meta-item">
+              <i class="far fa-calendar"></i>
+              <span><?php echo date('d M Y', strtotime($featured_article['tanggal_publikasi'])); ?></span>
+            </div>
+            <div class="meta-item">
+              <i class="far fa-user"></i>
+              <span>Admin Waver</span>
+            </div>
+          </div>
+          <?php if (!empty($featured_article['link_artikel_eksternal'])): ?>
+            <a href="<?php echo htmlspecialchars($featured_article['link_artikel_eksternal']); ?>" target="_blank" class="read-more">
+              Baca Selengkapnya
+              <i class="fas fa-arrow-right"></i>
+            </a>
+          <?php endif; ?>
+        </div>
+        <div class="featured-image" data-aos="zoom-in" data-aos-delay="300">
+          <img src="<?php echo htmlspecialchars($featured_article['url_gambar']); ?>" alt="<?php echo htmlspecialchars($featured_article['judul']); ?>" />
+        </div>
+      <?php else: ?>
+        <div style="text-align: center; width: 100%;">
+          <i class="fas fa-newspaper" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+          <h4>Belum Ada Artikel</h4>
+          <p>Belum ada artikel yang tersedia saat ini.</p>
+        </div>
+      <?php endif; ?>
     </section>
 
     <!-- Artikel Terbaru -->
@@ -649,7 +724,42 @@
 
       <!-- Article Grid -->
       <div class="article-grid" id="article-grid-container">
-        <!-- Articles will be loaded dynamically -->
+        <?php if (!empty($artikel_data) && count($artikel_data) > 1): ?>
+          <?php foreach(array_slice($artikel_data, 1) as $index => $article): ?>
+            <div class="card-article" data-aos="zoom-in" data-aos-delay="<?php echo ($index * 100); ?>">
+              <div class="article-image-container">
+                <img src="<?php echo htmlspecialchars($article['url_gambar']); ?>" alt="<?php echo htmlspecialchars($article['judul']); ?>" class="article-image" />
+              </div>
+              <div class="card-body">
+                <span class="article-category"><?php echo htmlspecialchars($article['kategori']); ?></span>
+                <h5><?php echo htmlspecialchars($article['judul']); ?></h5>
+                <div class="article-meta">
+                  <div class="meta-item">
+                    <i class="far fa-calendar"></i>
+                    <span><?php echo date('d M Y', strtotime($article['tanggal_publikasi'])); ?></span>
+                  </div>
+                  <div class="meta-item">
+                    <i class="far fa-clock"></i>
+                    <span><?php echo ceil(str_word_count($article['konten']) / 200); ?> min read</span>
+                  </div>
+                </div>
+                <p><?php echo htmlspecialchars(substr($article['konten'], 0, 120) . '...'); ?></p>
+                <?php if (!empty($article['link_artikel_eksternal'])): ?>
+                  <a href="<?php echo htmlspecialchars($article['link_artikel_eksternal']); ?>" target="_blank" class="read-more">
+                    Baca Selengkapnya
+                    <i class="fas fa-arrow-right"></i>
+                  </a>
+                <?php endif; ?>
+              </div>
+            </div>
+          <?php endforeach; ?>
+        <?php else: ?>
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+            <i class="fas fa-newspaper" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+            <h4>Belum Ada Artikel Lainnya</h4>
+            <p>Belum ada artikel lainnya yang tersedia saat ini.</p>
+          </div>
+        <?php endif; ?>
       </div>
     </section>
   </main>
@@ -682,8 +792,6 @@
     const closeNotifBtn = document.getElementById("closeNotifBtn");
     const backToTop = document.getElementById("backToTop");
     const scrollProgress = document.getElementById("scrollProgress");
-    const articleGridContainer = document.getElementById("article-grid-container");
-    const featuredArticleContainer = document.getElementById("featured-article-container");
 
     // Scroll Effects
     window.addEventListener("scroll", () => {
@@ -727,244 +835,30 @@
 
     closeNotifBtn.addEventListener("click", closeNotification);
 
-    // ===== ARTIKEL FUNCTIONALITY - TERINTEGRASI DENGAN ADMIN ====
-    function loadArticles() {
-        console.log('📥 Memuat data artikel dari localStorage...');
-        
-        const articles = JSON.parse(localStorage.getItem('articles')) || [];
-        
-        console.log('📊 Data artikel yang ditemukan:', articles.length);
-        
-        // Jika tidak ada data dari admin, gunakan data default
-        if (articles.length === 0) {
-            console.log('ℹ️ Tidak ada data dari admin, menggunakan data default');
-            setDefaultArticles();
-            return;
-        }
-        
-        // Update tampilan artikel
-        updateArticlesDisplay(articles);
-    }
-
-    function setDefaultArticles() {
-    // Data default jika tidak ada data dari admin
-    const defaultArticles = [
-        { 
-            title: "Detik-detik Gempa M 6.9 dan Tsunami Guncang Jepang", 
-            category: "Berita Utama", 
-            image: "img/jepang.webp",
-            content: "Gempa bumi berkekuatan magnitudo 6,9 mengguncang Jepang disusul peringatan tsunami. Kejadian ini mengingatkan pentingnya sistem peringatan dini yang efektif untuk menyelamatkan ribuan nyawa.",
-            summary: "Gempa bumi berkekuatan magnitudo 6,9 mengguncang Jepang disusul peringatan tsunami...",
-            externalLink: "https://www.cnnindonesia.com/internasional/20240102123435-134-1044566/detik-detik-gempa-m-69-dan-tsunami-guncang-jepang",
-            date: new Date().toISOString(),
-            author: "Admin Waver"
-        },
-        { 
-            title: "Peringatan Tsunami Sedunia Dorong Edukasi dan Kewaspadaan Masyarakat", 
-            category: "Berita Utama", 
-            image: "img/rri.jpeg",
-            content: "Peringatan tsunami sedunia mengingatkan pentingnya edukasi dan kewaspadaan masyarakat terhadap potensi bencana tsunami di wilayah pesisir.",
-            summary: "Peringatan tsunami sedunia mengingatkan pentingnya edukasi dan kewaspadaan masyarakat...",
-            externalLink: "https://rri.co.id/ekonomi-dan-bisnis/411259/peringatan-tsunami-sedunia-dorong-edukasi-dan-kewaspadaan-masyarakat",
-            date: new Date(Date.now() - 86400000).toISOString(), // 1 hari lalu
-            author: "Admin Waver"
-        },
-        { 
-            title: "AVIRsinami: Teknologi Virtual Reality untuk Edukasi dan Simulasi Mitigasi Tsunami", 
-            category: "Teknologi", 
-            image: "img/brin.webp",
-            content: "BRIN mengembangkan AVIRsinami, teknologi Virtual Reality untuk edukasi dan simulasi mitigasi tsunami yang inovatif dan interaktif.",
-            summary: "BRIN mengembangkan AVIRsinami, teknologi Virtual Reality untuk edukasi dan simulasi mitigasi tsunami...",
-            externalLink: "https://www.brin.go.id/avirstunami-teknologi-virtual-reality-untuk-edukasi-dan-simulasi-mitigasi-tsunami/",
-            date: new Date(Date.now() - 172800000).toISOString(), // 2 hari lalu
-            author: "Admin Waver"
-        },
-        { 
-            title: "8 Tips Mitigasi Jika Terjadi Tsunami untuk Keselamatan Anda", 
-            category: "Tips & Edukasi", 
-            image: "img/satu.webp",
-            content: "Pelajari langkah-langkah penting yang harus dilakukan sebelum, selama, dan setelah tsunami untuk memastikan keselamatan Anda dan keluarga.",
-            summary: "Pelajari langkah-langkah penting yang harus dilakukan sebelum, selama, dan setelah tsunami...",
-            externalLink: "https://www.beritasatu.com/nasional/1179386/8-tips-mitigasi-jika-terjadi-tsunami-untuk-keselamatan-anda",
-            date: new Date(Date.now() - 259200000).toISOString(), // 3 hari lalu
-            author: "Admin Waver"
-        },
-        { 
-            title: "Ekspedisi Geosains Laut Resmi Dimulai untuk Mitigasi Bencana Serupa Tsunami Aceh 2004", 
-            category: "Penelitian", 
-            image: "img/geosains.jpg",
-            content: "Ekspedisi geosains laut dilakukan untuk mempelajari kondisi dasar laut guna mengantisipasi bencana serupa tsunami Aceh 2004.",
-            summary: "Ekspedisi geosains laut dilakukan untuk mempelajari kondisi dasar laut guna mengantisipasi bencana...",
-            externalLink: "https://www.brin.go.id/ekspedisi-geosains-laut-resmi-dimulai-untuk-mitigasi-bencana-serupa-tsunami-aceh-2004/",
-            date: new Date(Date.now() - 345600000).toISOString(), // 4 hari lalu
-            author: "Admin Tsuname"
-        },
-        { 
-            title: "Puluhan Pelajar SMA di Aceh Besar Ikuti Edukasi Mitigasi Bencana", 
-            category: "Edukasi", 
-            image: "img/mitigasi.webp",
-            content: "Program edukasi mitigasi bencana melibatkan puluhan pelajar SMA di Aceh Besar untuk meningkatkan kesiapsiagaan generasi muda.",
-            summary: "Program edukasi mitigasi bencana melibatkan puluhan pelajar SMA di Aceh Besar...",
-            externalLink: "https://www.antaranews.com/berita/4112595/puluhan-pelajar-sma-di-aceh-besar-ikuti-edukasi-mitigasi-bencana",
-            date: new Date(Date.now() - 432000000).toISOString(), // 5 hari lalu
-            author: "Admin Waver"
-        }
-    ];
-    
-    // Simpan data default ke localStorage
-    localStorage.setItem('articles', JSON.stringify(defaultArticles));
-    
-    // Update tampilan
-    updateArticlesDisplay(defaultArticles);
-}
-
-    function updateArticlesDisplay(articles) {
-        console.log('🔄 Memperbarui tampilan artikel dengan', articles.length, 'data');
-        
-        // Sort articles by date (newest first)
-        articles.sort((a, b) => new Date(b.date) - new Date(a.date));
-        
-        // Update featured article (most recent)
-        updateFeaturedArticle(articles[0]);
-        
-        // Update article grid
-        updateArticleGrid(articles.slice(1)); // Exclude the featured article
-    }
-
-   function updateFeaturedArticle(article) {
-    if (!article) return;
-    
-    const formattedDate = new Date(article.date).toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric'
-    });
-    
-    featuredArticleContainer.innerHTML = `
-        <div class="featured-content">
-            <span class="article-category">${article.category}</span>
-            <h2>${article.title}</h2>
-            <p>${article.summary || article.content.substring(0, 200) + '...'}</p>
-            <div class="article-meta">
-                <div class="meta-item">
-                    <i class="far fa-calendar"></i>
-                    <span>${formattedDate}</span>
-                </div>
-                <div class="meta-item">
-                    <i class="far fa-user"></i>
-                    <span>${article.author || "Admin Waver"}</span>
-                </div>
-            </div>
-            <a href="${article.externalLink}" target="_blank" class="read-more">
-                Baca Selengkapnya
-                <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-        <div class="featured-image" data-aos="zoom-in" data-aos-delay="300">
-            <img src="${article.image}" alt="${article.title}" />
-        </div>
-    `;
-}
-
-    function updateArticleGrid(articles) {
-        // Kosongkan container
-        articleGridContainer.innerHTML = '';
-        
-        if (articles.length === 0) {
-            articleGridContainer.innerHTML = `
-                <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
-                    <i class="fas fa-newspaper" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
-                    <h4>Belum Ada Artikel</h4>
-                    <p>Belum ada artikel yang tersedia saat ini.</p>
-                </div>
-            `;
-            return;
-        }
-        
-        // Tampilkan semua artikel
-        articles.forEach((article, index) => {
-            const articleCard = createArticleCard(article, index);
-            articleGridContainer.appendChild(articleCard);
-        });
-    }
-
-    function createArticleCard(article, index) {
-    const div = document.createElement("div");
-    div.classList.add("card-article");
-    div.setAttribute("data-aos", "zoom-in");
-    div.setAttribute("data-aos-delay", (index * 100).toString());
-
-    const formattedDate = new Date(article.date).toLocaleDateString('id-ID', {
-        day: '2-digit',
-        month: 'short',
-        year: 'numeric'
-    });
-
-    // Estimate reading time (approx 200 words per minute)
-    const wordCount = article.content.split(' ').length;
-    const readingTime = Math.ceil(wordCount / 200);
-
-    div.innerHTML = `
-        <div class="article-image-container">
-            <img src="${article.image}" alt="${article.title}" class="article-image" />
-        </div>
-        <div class="card-body">
-            <span class="article-category">${article.category}</span>
-            <h5>${article.title}</h5>
-            <div class="article-meta">
-                <div class="meta-item">
-                    <i class="far fa-calendar"></i>
-                    <span>${formattedDate}</span>
-                </div>
-                <div class="meta-item">
-                    <i class="far fa-clock"></i>
-                    <span>${readingTime} min read</span>
-                </div>
-            </div>
-            <p>${article.summary || article.content.substring(0, 120) + '...'}</p>
-            <a href="${article.externalLink}" target="_blank" class="read-more">
-                Baca Selengkapnya
-                <i class="fas fa-arrow-right"></i>
-            </a>
-        </div>
-    `;
-    
-    return div;
-}
-
-    // === AUTO REFRESH DATA ===
+    // Auto-refresh data every 30 seconds
     function startDataPolling() {
-        // Cek perubahan data setiap 3 detik
-        setInterval(() => {
-            const currentData = JSON.parse(localStorage.getItem('articles') || '[]');
-            const lastData = window.lastArticleData || [];
-            
-            // Jika ada perubahan data, refresh
-            if (JSON.stringify(currentData) !== JSON.stringify(lastData)) {
-                console.log('🔄 Data artikel berubah, melakukan refresh...');
-                loadArticles();
-                window.lastArticleData = currentData;
-            }
-        }, 3000);
+      setInterval(() => {
+        console.log('🔄 Auto refresh data artikel...');
+        location.reload();
+      }, 30000);
     }
 
     // Check Notification on Page Load
     window.addEventListener("DOMContentLoaded", () => {
-        const notifActive = localStorage.getItem("notifActive");
-        const notifClosed = localStorage.getItem("notifClosed");
+      const notifActive = localStorage.getItem("notifActive");
+      const notifClosed = localStorage.getItem("notifClosed");
 
-        if ((notifActive === "true" && notifClosed === "false") || 
-            (notifActive === null && notifClosed === null)) {
-            showNotification();
-        } else {
-            notif.style.display = "none";
-            navbar.classList.remove("notif-active");
-            hero.classList.remove("notif-active");
-        }
-        
-        // Load articles data
-        loadArticles();
-        startDataPolling();
+      if ((notifActive === "true" && notifClosed === "false") || 
+          (notifActive === null && notifClosed === null)) {
+        showNotification();
+      } else {
+        notif.style.display = "none";
+        navbar.classList.remove("notif-active");
+        hero.classList.remove("notif-active");
+      }
+      
+      // Start auto refresh
+      startDataPolling();
     });
   </script>
 </body>
