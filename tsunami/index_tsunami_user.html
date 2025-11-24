@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Tsuname - Pusat Informasi dan Edukasi Tsunami Indonesia" />
+  <meta name="description" content="Waver - Pusat Informasi dan Edukasi Tsunami Indonesia" />
   <meta name="keywords" content="tsunami, informasi tsunami, edukasi bencana, mitigasi tsunami" />
-  <title>Tsuname — Pusat Informasi Tsunami</title>
+  <title>Waver — Pusat Informasi Tsunami</title>
 
   <!-- FONT & LIBRARY -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -575,7 +575,7 @@
   <!-- ===== HERO ===== -->
   <section class="hero" id="home">
     <div class="hero-content" data-aos="fade-up" data-aos-duration="1200">
-      <h1>Tsuname</h1>
+      <h1>Waver</h1>
       <p>Pusat Informasi dan Edukasi Tsunami Indonesia</p>
       <button class="cta-btn" onclick="scrollToContent()" aria-label="Pelajari tentang tsunami">Pelajari Sekarang</button>
     </div>
@@ -645,8 +645,8 @@
 
   <!-- ===== FOOTER ===== -->
   <footer data-aos="fade-up">
-    <h4>Tsuname Project © 2025</h4>
-    <p>Created by Tsuname | Stay Safe, Stay Prepared</p>
+    <h4>Waver Project © 2025</h4>
+    <p>Created by Waver | Stay Safe, Stay Prepared</p>
   </footer>
 
   <button id="backToTop" aria-label="Kembali ke atas">↑</button>
@@ -768,6 +768,76 @@
         navbar.classList.remove("notif-active");
       }
     });
+
+    // Di admin dashboard - tambahkan fungsi ini
+function syncDataToUserPage() {
+    const incidents = JSON.parse(localStorage.getItem('incidents')) || [];
+    
+    // Format data untuk halaman user
+    const userIncidents = incidents.map(incident => {
+        // Konversi status
+        let statusClass = 'status-selesai';
+        let statusText = 'Selesai';
+        
+        if (incident.status === 'aktif') {
+            statusClass = 'status-aktif';
+            statusText = 'Aktif';
+        } else if (incident.status === 'pemantauan') {
+            statusClass = 'status-pemantauan';
+            statusText = 'Pemantauan';
+        }
+        
+        // Format tanggal
+        const date = new Date(incident.date);
+        const formattedDate = date.toLocaleDateString('id-ID', {
+            day: '2-digit',
+            month: 'short',
+            year: 'numeric'
+        });
+        
+        return {
+            tanggal: formattedDate,
+            lokasi: incident.location,
+            magnitudo: incident.magnitude + ' SR',
+            status: `<span class="status-badge ${statusClass}">${statusText}</span>`,
+            volunteer: incident.status === 'selesai' ? 
+                '<button class="daftar-btn" disabled><i class="fas fa-ban"></i> Tidak Tersedia</button>' :
+                `<button class="daftar-btn" onclick="daftarVolunteer('${incident.location}')"><i class="fas fa-user-plus"></i> Daftar</button>`
+        };
+    });
+    
+    // Simpan ke localStorage dengan key khusus untuk halaman user
+    localStorage.setItem('userIncidentsData', JSON.stringify(userIncidents));
+    
+    // Juga simpan data statistik
+    const activeIncidents = incidents.filter(i => i.status === 'aktif').length;
+    const monitoringIncidents = incidents.filter(i => i.status === 'pemantauan').length;
+    const completedIncidents = incidents.filter(i => i.status === 'selesai').length;
+    
+    const stats = {
+        total: incidents.length,
+        active: activeIncidents,
+        monitoring: monitoringIncidents,
+        completed: completedIncidents
+    };
+    
+    localStorage.setItem('userIncidentsStats', JSON.stringify(stats));
+}
+
+// Panggil fungsi sync setiap kali data berubah
+function saveIncident() {
+    // ... kode save incident yang sudah ada ...
+    
+    // Tambahkan ini di akhir fungsi
+    syncDataToUserPage();
+}
+
+function deleteIncident(index) {
+    // ... kode delete incident yang sudah ada ...
+    
+    // Tambahkan ini di akhir fungsi
+    syncDataToUserPage();
+}
   </script>
 </body>
 </html>

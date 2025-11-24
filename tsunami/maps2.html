@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Peta Posko & Daerah Rawan - Tsuname</title>
+    <title>Peta Posko & Daerah Rawan - Waver</title>
 
     <!-- Font & Library -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -336,10 +336,6 @@
         background: var(--warning);
       }
 
-      .legend-color.tsunami {
-        background: var(--danger);
-      }
-
       /* ===== MAP ===== */
       #map {
         height: 70vh;
@@ -588,28 +584,28 @@
           <div class="stat-icon">
             <i class="fas fa-map-marker-alt"></i>
           </div>
-          <div class="stat-value">5</div>
+          <div class="stat-value" id="total-posko">0</div>
           <div class="stat-label">Posko Evakuasi</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">
             <i class="fas fa-exclamation-circle"></i>
           </div>
-          <div class="stat-value">4</div>
+          <div class="stat-value" id="total-rawan">0</div>
           <div class="stat-label">Daerah Rawan</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">
             <i class="fas fa-users"></i>
           </div>
-          <div class="stat-value">1,100</div>
+          <div class="stat-value" id="total-kapasitas">0</div>
           <div class="stat-label">Kapasitas Evakuasi</div>
         </div>
         <div class="stat-card">
           <div class="stat-icon">
             <i class="fas fa-shield-alt"></i>
           </div>
-          <div class="stat-value">85%</div>
+          <div class="stat-value" id="kesiapsiagaan">0%</div>
           <div class="stat-label">Kesiapsiagaan</div>
         </div>
       </div>
@@ -628,10 +624,6 @@
             <div class="legend-color rawan"></div>
             <span>Daerah Rawan</span>
           </div>
-          <div class="legend-item">
-            <div class="legend-color tsunami"></div>
-            <span>Zona Tsunami</span>
-          </div>
         </div>
       </div>
       <div id="map"></div>
@@ -639,8 +631,8 @@
 
     <!-- ===== FOOTER ===== -->
     <footer>
-      <h4>Tsuname Project © 2025</h4>
-      <p>Created by Tsuname | Stay Safe, Stay Prepared</p>
+      <h4>Waver Project © 2025</h4>
+      <p>Created by Waver | Stay Safe, Stay Prepared</p>
     </footer>
 
     <!-- ===== BACK TO TOP BUTTON ===== -->
@@ -657,6 +649,180 @@
       const closeNotifBtn = document.getElementById("closeNotifBtn");
       const backToTop = document.getElementById("backToTop");
       const scrollProgress = document.getElementById("scrollProgress");
+
+      // ===== Global Variables =====
+      let map;
+      let poskoMarkers = [];
+      let rawanMarkers = [];
+      let tsunamiCircle = null;
+      let tsunamiMarker = null;
+
+      // ===== Data from Admin Dashboard =====
+      function loadMapDataFromAdmin() {
+        // Load data from localStorage (sync from admin dashboard)
+        const poskoData = JSON.parse(localStorage.getItem('userMapPosko')) || [];
+        const rawanData = JSON.parse(localStorage.getItem('userMapRawan')) || [];
+
+        console.log('Loaded data from admin:', { poskoData, rawanData });
+
+        return { poskoData, rawanData };
+      }
+
+      // ===== Initialize Map =====
+      function initializeMap() {
+        map = L.map("map").setView([-2.5, 118], 5);
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19,
+          attribution: "© OpenStreetMap contributors",
+        }).addTo(map);
+
+        // Load and display data from admin
+        const { poskoData, rawanData } = loadMapDataFromAdmin();
+        displayMapData(poskoData, rawanData);
+        updateStatistics(poskoData, rawanData);
+      }
+
+      // ===== Display Map Data =====
+      function displayMapData(poskoData, rawanData) {
+        // Clear existing markers
+        clearAllMarkers();
+
+        // Create custom icons
+        const poskoIcon = L.divIcon({
+          html: '<i class="fas fa-home" style="color: #28a745; font-size: 20px;"></i>',
+          className: 'custom-posko-icon',
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
+        });
+
+        const rawanIcon = L.divIcon({
+          html: '<i class="fas fa-exclamation-triangle" style="color: #ffc107; font-size: 20px;"></i>',
+          className: 'custom-rawan-icon',
+          iconSize: [20, 20],
+          iconAnchor: [10, 10]
+        });
+
+        // Add posko markers
+        poskoData.forEach((p) => {
+          const marker = L.marker([p.lat, p.lng], { icon: poskoIcon }).addTo(map);
+          marker.bindPopup(`
+            <div style="min-width: 200px;">
+              <h6 style="color: #28a745; margin-bottom: 10px;"><b>${p.name}</b></h6>
+              <p style="margin-bottom: 5px;"><i class="fas fa-map-marker-alt" style="color: #0057ff;"></i> <b>Lokasi:</b> ${p.location}</p>
+              <p style="margin-bottom: 5px;"><i class="fas fa-users" style="color: #0057ff;"></i> <b>Kapasitas:</b> ${p.capacity} orang</p>
+              <p style="margin-bottom: 0;"><i class="fas fa-phone" style="color: #0057ff;"></i> <b>Kontak:</b> ${p.contact}</p>
+            </div>
+          `);
+          poskoMarkers.push(marker);
+        });
+
+        // Add rawan markers
+        rawanData.forEach((r) => {
+          const marker = L.marker([r.lat, r.lng], { icon: rawanIcon }).addTo(map);
+          const dangerLevelText = {
+            'rendah': 'Rendah',
+            'sedang': 'Sedang', 
+            'tinggi': 'Tinggi'
+          }[r.dangerLevel] || r.dangerLevel;
+
+          const dangerLevelClass = {
+            'rendah': 'status-active',
+            'sedang': 'status-warning',
+            'tinggi': 'status-danger'
+          }[r.dangerLevel] || 'status-pending';
+
+          marker.bindPopup(`
+            <div style="min-width: 250px;">
+              <h6 style="color: #ffc107; margin-bottom: 10px;"><b>${r.name}</b></h6>
+              <p style="margin-bottom: 5px;"><i class="fas fa-map-marker-alt" style="color: #0057ff;"></i> <b>Lokasi:</b> ${r.location}</p>
+              <p style="margin-bottom: 10px;"><span class="status-badge ${dangerLevelClass}">${dangerLevelText}</span></p>
+              <div class="chart-container"><canvas id="chart-${r.name.replace(/\s/g, '')}"></canvas></div>
+            </div>
+          `);
+          
+          marker.on("popupopen", () => {
+            const chartId = `chart-${r.name.replace(/\s/g, '')}`;
+            const ctx = document.getElementById(chartId);
+            if (ctx) {
+              new Chart(ctx, {
+                type: "line",
+                data: {
+                  labels: ["06:00", "09:00", "12:00", "15:00", "18:00"],
+                  datasets: [
+                    {
+                      label: "Ketinggian Gelombang (m)",
+                      data: [0.5, 1.2, 0.8, 1.6, 0.9],
+                      borderColor: "#007bff",
+                      backgroundColor: "rgba(0,123,255,0.2)",
+                      fill: true,
+                      tension: 0.4,
+                    },
+                  ],
+                },
+                options: { 
+                  plugins: { legend: { display: false } }, 
+                  scales: { 
+                    y: { 
+                      beginAtZero: true,
+                      title: {
+                        display: true,
+                        text: 'Meter'
+                      }
+                    },
+                    x: {
+                      title: {
+                        display: true,
+                        text: 'Waktu'
+                      }
+                    }
+                  } 
+                },
+              });
+            }
+          });
+          rawanMarkers.push(marker);
+        });
+      }
+
+      // ===== Clear All Markers =====
+      function clearAllMarkers() {
+        poskoMarkers.forEach(marker => map.removeLayer(marker));
+        rawanMarkers.forEach(marker => map.removeLayer(marker));
+        
+        poskoMarkers = [];
+        rawanMarkers = [];
+      }
+
+      // ===== Update Statistics =====
+      function updateStatistics(poskoData, rawanData) {
+        const totalPosko = poskoData.length;
+        const totalRawan = rawanData.length;
+        const totalKapasitas = poskoData.reduce((sum, posko) => sum + (posko.capacity || 0), 0);
+        
+        // Calculate preparedness percentage (example calculation)
+        const kesiapsiagaan = Math.min(100, Math.round((totalPosko / Math.max(totalRawan, 1)) * 100));
+
+        document.getElementById('total-posko').textContent = totalPosko;
+        document.getElementById('total-rawan').textContent = totalRawan;
+        document.getElementById('total-kapasitas').textContent = totalKapasitas.toLocaleString();
+        document.getElementById('kesiapsiagaan').textContent = kesiapsiagaan + '%';
+      }
+
+      // ===== Filter Functions =====
+      function showAll() {
+        const { poskoData, rawanData } = loadMapDataFromAdmin();
+        displayMapData(poskoData, rawanData);
+      }
+      
+      function showPosko() {
+        const { poskoData } = loadMapDataFromAdmin();
+        displayMapData(poskoData, []);
+      }
+      
+      function showRawan() {
+        const { rawanData } = loadMapDataFromAdmin();
+        displayMapData([], rawanData);
+      }
 
       // ===== Scroll Effects =====
       window.addEventListener("scroll", () => {
@@ -681,129 +847,6 @@
       backToTop.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
-
-      // ===== Map Initialization =====
-      const map = L.map("map").setView([-2.5, 118], 5);
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        maxZoom: 19,
-        attribution: "© OpenStreetMap contributors",
-      }).addTo(map);
-
-      // ===== Data Posko dan Daerah Rawan =====
-      const poskoData = [
-        { name: "Posko Banda Aceh", coords: [5.55, 95.32], kapasitas: 250, kontak: "0812-5555-8888" },
-        { name: "Posko Cilacap", coords: [-7.72, 109.01], kapasitas: 180, kontak: "0813-1234-5678" },
-        { name: "Posko Padang", coords: [-0.95, 100.35], kapasitas: 220, kontak: "0814-8888-9999" },
-        { name: "Posko Palu", coords: [-0.89, 119.87], kapasitas: 300, kontak: "0812-9999-1212" },
-        { name: "Posko Manado", coords: [1.49, 124.84], kapasitas: 150, kontak: "0822-3210-4321" },
-      ];
-
-      const rawanData = [
-        { name: "Daerah Rawan Padang", coords: [-0.95, 100.35] },
-        { name: "Daerah Rawan Palu", coords: [-0.9, 119.87] },
-        { name: "Daerah Rawan Bengkulu", coords: [-3.8, 102.26] },
-        { name: "Daerah Rawan Banten", coords: [-6.3, 106.1] },
-      ];
-
-      const poskoMarkers = [];
-      const rawanMarkers = [];
-      let tsunamiCircle = null;
-      let tsunamiMarker = null;
-
-      // Create custom icons
-      const poskoIcon = L.divIcon({
-        html: '<i class="fas fa-home" style="color: #28a745; font-size: 20px;"></i>',
-        className: 'custom-posko-icon',
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
-      });
-
-      const rawanIcon = L.divIcon({
-        html: '<i class="fas fa-exclamation-triangle" style="color: #ffc107; font-size: 20px;"></i>',
-        className: 'custom-rawan-icon',
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
-      });
-
-      // Add posko markers
-      poskoData.forEach((p) => {
-        const marker = L.marker(p.coords, { icon: poskoIcon }).addTo(map);
-        marker.bindPopup(`
-          <div style="min-width: 200px;">
-            <h6 style="color: #28a745; margin-bottom: 10px;"><b>${p.name}</b></h6>
-            <p style="margin-bottom: 5px;"><i class="fas fa-users" style="color: #0057ff;"></i> <b>Kapasitas:</b> ${p.kapasitas} orang</p>
-            <p style="margin-bottom: 0;"><i class="fas fa-phone" style="color: #0057ff;"></i> <b>Kontak:</b> ${p.kontak}</p>
-          </div>
-        `);
-        poskoMarkers.push(marker);
-      });
-
-      // Add rawan markers
-      rawanData.forEach((r) => {
-        const chartId = `chart-${r.name.replace(/\s/g, "")}`;
-        const marker = L.marker(r.coords, { icon: rawanIcon }).addTo(map);
-        marker.bindPopup(`
-          <div style="min-width: 250px;">
-            <h6 style="color: #ffc107; margin-bottom: 15px;"><b>${r.name}</b></h6>
-            <p style="margin-bottom: 10px; font-size: 14px;"><i class="fas fa-chart-line" style="color: #0057ff;"></i> <b>Monitoring Ketinggian Gelombang:</b></p>
-            <div class="chart-container"><canvas id="${chartId}"></canvas></div>
-          </div>
-        `);
-        marker.on("popupopen", () => {
-          const ctx = document.getElementById(chartId);
-          new Chart(ctx, {
-            type: "line",
-            data: {
-              labels: ["06:00", "09:00", "12:00", "15:00", "18:00"],
-              datasets: [
-                {
-                  label: "Ketinggian Gelombang (m)",
-                  data: [0.5, 1.2, 0.8, 1.6, 0.9],
-                  borderColor: "#007bff",
-                  backgroundColor: "rgba(0,123,255,0.2)",
-                  fill: true,
-                  tension: 0.4,
-                },
-              ],
-            },
-            options: { 
-              plugins: { legend: { display: false } }, 
-              scales: { 
-                y: { 
-                  beginAtZero: true,
-                  title: {
-                    display: true,
-                    text: 'Meter'
-                  }
-                },
-                x: {
-                  title: {
-                    display: true,
-                    text: 'Waktu'
-                  }
-                }
-              } 
-            },
-          });
-        });
-        rawanMarkers.push(marker);
-      });
-
-      // ===== Filter Functions =====
-      function showAll() {
-        poskoMarkers.forEach((m) => map.addLayer(m));
-        rawanMarkers.forEach((m) => map.addLayer(m));
-      }
-      
-      function showPosko() {
-        poskoMarkers.forEach((m) => map.addLayer(m));
-        rawanMarkers.forEach((m) => map.removeLayer(m));
-      }
-      
-      function showRawan() {
-        poskoMarkers.forEach((m) => map.removeLayer(m));
-        rawanMarkers.forEach((m) => map.addLayer(m));
-      }
 
       // ===== Notifikasi Global =====
       function activateNotification() {
@@ -871,10 +914,43 @@
         map.setView(tsunamiLocation, 7);
       }
 
+      // ===== Initialize Default Data if Empty =====
+      function initializeDefaultData() {
+        const poskoData = JSON.parse(localStorage.getItem('userMapPosko'));
+        const rawanData = JSON.parse(localStorage.getItem('userMapRawan'));
+
+        if (!poskoData || poskoData.length === 0) {
+          const defaultPosko = [
+            { name: "Posko Banda Aceh", location: "Banda Aceh", lat: 5.55, lng: 95.32, capacity: 250, contact: "0812-5555-8888" },
+            { name: "Posko Cilacap", location: "Cilacap", lat: -7.72, lng: 109.01, capacity: 180, contact: "0813-1234-5678" },
+            { name: "Posko Padang", location: "Padang", lat: -0.95, lng: 100.35, capacity: 220, contact: "0814-8888-9999" },
+            { name: "Posko Palu", location: "Palu", lat: -0.89, lng: 119.87, capacity: 300, contact: "0812-9999-1212" },
+            { name: "Posko Manado", location: "Manado", lat: 1.49, lng: 124.84, capacity: 150, contact: "0822-3210-4321" }
+          ];
+          localStorage.setItem('userMapPosko', JSON.stringify(defaultPosko));
+        }
+
+        if (!rawanData || rawanData.length === 0) {
+          const defaultRawan = [
+            { name: "Daerah Rawan Padang", location: "Padang", lat: -0.95, lng: 100.35, dangerLevel: "tinggi" },
+            { name: "Daerah Rawan Palu", location: "Palu", lat: -0.9, lng: 119.87, dangerLevel: "tinggi" },
+            { name: "Daerah Rawan Bengkulu", location: "Bengkulu", lat: -3.8, lng: 102.26, dangerLevel: "sedang" },
+            { name: "Daerah Rawan Banten", location: "Banten", lat: -6.3, lng: 106.1, dangerLevel: "sedang" }
+          ];
+          localStorage.setItem('userMapRawan', JSON.stringify(defaultRawan));
+        }
+      }
+
       // ===== Saat Halaman Dimuat =====
       window.addEventListener("DOMContentLoaded", () => {
         const notifActive = localStorage.getItem("notifActive");
         const notifClosed = localStorage.getItem("notifClosed");
+
+        // Initialize default data if empty
+        initializeDefaultData();
+
+        // Initialize map
+        initializeMap();
 
         // Tampilkan notifikasi jika aktif dan belum ditutup
         if (notifActive === "true" && notifClosed === "false") {
@@ -884,6 +960,13 @@
           navbar.classList.remove("notif-active");
         }
       });
+
+      // ===== Auto-refresh data every 30 seconds =====
+      setInterval(() => {
+        const { poskoData, rawanData } = loadMapDataFromAdmin();
+        updateStatistics(poskoData, rawanData);
+        console.log('Data refreshed from admin dashboard');
+      }, 30000);
     </script>
   </body>
 </html>

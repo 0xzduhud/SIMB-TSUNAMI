@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tsuname — Artikel & Edukasi</title>
+  <title>Waver — Artikel & Edukasi</title>
 
   <!-- FONT & LIBRARY -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -246,6 +246,23 @@
     }
 
     /* ===== ARTICLE GRID ===== */
+
+    /* Style untuk link eksternal */
+.read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    margin-top: auto;
+    padding: 8px 16px;
+}
+
+.read-more:hover {
+    gap: 12px;
+}
     .article-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -622,19 +639,8 @@
     </div>
 
     <!-- Featured Article -->
-    <section class="featured-article" data-aos="fade-up">
-      <div class="featured-content">
-        <span class="article-category">Berita Utama</span>
-        <h2>Detik-detik Gempa M 6.9 dan Tsunami Guncang Jepang</h2>
-        <p>Gempa bumi berkekuatan magnitudo 6,9 mengguncang Jepang disusul peringatan tsunami. Kejadian ini mengingatkan pentingnya sistem peringatan dini yang efektif untuk menyelamatkan ribuan nyawa.</p>
-        <a href="https://www.inilah.com/gempa-magnitudo-67-guncang-jepang-timur-laut-picu-peringatan-tsunami" class="read-more" target="_blank">
-          Baca Selengkapnya
-          <i class="fas fa-arrow-right"></i>
-        </a>
-      </div>
-      <div class="featured-image" data-aos="zoom-in" data-aos-delay="300">
-        <img src="img/jepang.webp" alt="Gempa dan Tsunami Jepang" />
-      </div>
+    <section class="featured-article" data-aos="fade-up" id="featured-article-container">
+      <!-- Featured article will be loaded dynamically -->
     </section>
 
     <!-- Artikel Terbaru -->
@@ -642,156 +648,8 @@
       <h2>Artikel Terbaru</h2>
 
       <!-- Article Grid -->
-      <div class="article-grid">
-        <!-- Berita 1 -->
-        <div class="card-article" data-aos="zoom-in">
-          <div class="article-image-container">
-            <img src="img/rri.jpeg" alt="Peringatan Tsunami Sedunia" class="article-image" />
-          </div>
-          <div class="card-body">
-            <h5>Peringatan Tsunami Sedunia Dorong Edukasi dan Kewaspadaan Masyarakat</h5>
-            <div class="article-meta">
-              <div class="meta-item">
-                <i class="far fa-calendar"></i>
-                <span>10 November 2025</span>
-              </div>
-              <div class="meta-item">
-                <i class="far fa-clock"></i>
-                <span>4 min read</span>
-              </div>
-            </div>
-            <p>Peringatan tsunami sedunia mengingatkan pentingnya edukasi dan kewaspadaan masyarakat terhadap potensi bencana tsunami di wilayah pesisir.</p>
-            <a href="https://rri.co.id/ambon/lain-lain/1952718/peringatan-tsunami-sedunia-dorong-edukasi-dan-kewaspadaan-masyarakat" class="read-more" target="_blank">
-              Baca Selengkapnya
-              <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Berita 2 -->
-        <div class="card-article" data-aos="zoom-in" data-aos-delay="100">
-          <div class="article-image-container">
-            <img src="img/brin.webp" alt="Teknologi VR untuk Mitigasi Tsunami" class="article-image" />
-          </div>
-          <div class="card-body">
-            <h5>AVIRsinami: Teknologi Virtual Reality untuk Edukasi dan Simulasi Mitigasi Tsunami</h5>
-            <div class="article-meta">
-              <div class="meta-item">
-                <i class="far fa-calendar"></i>
-                <span>09 November 2025</span>
-              </div>
-              <div class="meta-item">
-                <i class="far fa-clock"></i>
-                <span>6 min read</span>
-              </div>
-            </div>
-            <p>BRIN mengembangkan AVIRsinami, teknologi Virtual Reality untuk edukasi dan simulasi mitigasi tsunami yang inovatif dan interaktif.</p>
-            <a href="https://www.brin.go.id/news/124286/avirsinami-teknologi-virtual-reality-untuk-edukasi-dan-simulasi-mitigasi-tsunami" class="read-more" target="_blank">
-              Baca Selengkapnya
-              <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Berita 3 -->
-        <div class="card-article" data-aos="zoom-in" data-aos-delay="200">
-          <div class="article-image-container">
-            <img src="img/satu.webp" alt="Tips Mitigasi Tsunami" class="article-image" />
-          </div>
-          <div class="card-body">
-            <h5>8 Tips Mitigasi Jika Terjadi Tsunami untuk Keselamatan Anda</h5>
-            <div class="article-meta">
-              <div class="meta-item">
-                <i class="far fa-calendar"></i>
-                <span>08 November 2025</span>
-              </div>
-              <div class="meta-item">
-                <i class="far fa-clock"></i>
-                <span>5 min read</span>
-              </div>
-            </div>
-            <p>Pelajari langkah-langkah penting yang harus dilakukan sebelum, selama, dan setelah tsunami untuk memastikan keselamatan Anda dan keluarga.</p>
-            <a href="https://www.beritasatu.com/nasional/2909053/8-tips-mitigasi-jika-terjadi-tsunami-untuk-keselamatan-anda" class="read-more" target="_blank">
-              Baca Selengkapnya
-              <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Berita 4 -->
-        <div class="card-article" data-aos="zoom-in" data-aos-delay="300">
-          <div class="article-image-container">
-            <img src="img/geosains.jpg" alt="Ekspedisi Geosains Laut" class="article-image" />
-          </div>
-          <div class="card-body">
-            <h5>Ekspedisi Geosains Laut Resmi Dimulai untuk Mitigasi Bencana Serupa Tsunami Aceh 2004</h5>
-            <div class="article-meta">
-              <div class="meta-item">
-                <i class="far fa-calendar"></i>
-                <span>07 November 2025</span>
-              </div>
-              <div class="meta-item">
-                <i class="far fa-clock"></i>
-                <span>7 min read</span>
-              </div>
-            </div>
-            <p>Ekspedisi geosains laut dilakukan untuk mempelajari kondisi dasar laut guna mengantisipasi bencana serupa tsunami Aceh 2004.</p>
-            <a href="https://brin.go.id/news/124345/ekspedisi-geosains-laut-resmi-dimulai-mitigasi-bencana-serupa-tsunami-aceh-2004" class="read-more" target="_blank">
-              Baca Selengkapnya
-              <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Berita 5 -->
-        <div class="card-article" data-aos="zoom-in" data-aos-delay="400">
-          <div class="article-image-container">
-            <img src="img/mitigasi.webp" alt="Edukasi Mitigasi Bencana" class="article-image" />
-          </div>
-          <div class="card-body">
-            <h5>Puluhan Pelajar SMA di Aceh Besar Ikuti Edukasi Mitigasi Bencana</h5>
-            <div class="article-meta">
-              <div class="meta-item">
-                <i class="far fa-calendar"></i>
-                <span>06 November 2025</span>
-              </div>
-              <div class="meta-item">
-                <i class="far fa-clock"></i>
-                <span>3 min read</span>
-              </div>
-            </div>
-            <p>Program edukasi mitigasi bencana melibatkan puluhan pelajar SMA di Aceh Besar untuk meningkatkan kesiapsiagaan generasi muda.</p>
-            <a href="https://aceh.antaranews.com/berita/395313/puluhan-pelajar-sma-di-aceh-besar-ikuti-edukasi-mitigasi-bencana" class="read-more" target="_blank">
-              Baca Selengkapnya
-              <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
-
-        <!-- Berita 6 -->
-        <div class="card-article" data-aos="zoom-in" data-aos-delay="500">
-          <div class="article-image-container">
-            <img src="img/detik.png" alt="Sistem Peringatan Dini" class="article-image" />
-          </div>
-          <div class="card-body">
-            <h5>Memahami Sistem Peringatan Dini Tsunami di Indonesia</h5>
-            <div class="article-meta">
-              <div class="meta-item">
-                <i class="far fa-calendar"></i>
-                <span>05 November 2025</span>
-              </div>
-              <div class="meta-item">
-                <i class="far fa-clock"></i>
-                <span>4 min read</span>
-              </div>
-            </div>
-            <p>Pelajari bagaimana sistem peringatan dini tsunami bekerja dan bagaimana masyarakat dapat merespons dengan tepat saat peringatan diterbitkan.</p>
-            <a href="https://news.detik.com/berita/d-6508045/mengenal-sistem-peringatan-dini-tsunami-dan-langkah-evakuasinya" class="read-more" target="_blank">
-              Baca Selengkapnya
-              <i class="fas fa-arrow-right"></i>
-            </a>
-          </div>
-        </div>
+      <div class="article-grid" id="article-grid-container">
+        <!-- Articles will be loaded dynamically -->
       </div>
     </section>
   </main>
@@ -799,8 +657,8 @@
   <!-- ===== FOOTER ===== -->
   <footer data-aos="fade-up">
     <div class="footer-content">
-      <h4>Tsuname Project © 2025</h4>
-      <p>Created by Tsuname | Stay Safe, Stay Prepared</p>
+      <h4>Waver Project © 2025</h4>
+      <p>Created by Waver | Stay Safe, Stay Prepared</p>
     </div>
   </footer>
 
@@ -824,6 +682,8 @@
     const closeNotifBtn = document.getElementById("closeNotifBtn");
     const backToTop = document.getElementById("backToTop");
     const scrollProgress = document.getElementById("scrollProgress");
+    const articleGridContainer = document.getElementById("article-grid-container");
+    const featuredArticleContainer = document.getElementById("featured-article-container");
 
     // Scroll Effects
     window.addEventListener("scroll", () => {
@@ -867,19 +727,244 @@
 
     closeNotifBtn.addEventListener("click", closeNotification);
 
+    // ===== ARTIKEL FUNCTIONALITY - TERINTEGRASI DENGAN ADMIN ====
+    function loadArticles() {
+        console.log('📥 Memuat data artikel dari localStorage...');
+        
+        const articles = JSON.parse(localStorage.getItem('articles')) || [];
+        
+        console.log('📊 Data artikel yang ditemukan:', articles.length);
+        
+        // Jika tidak ada data dari admin, gunakan data default
+        if (articles.length === 0) {
+            console.log('ℹ️ Tidak ada data dari admin, menggunakan data default');
+            setDefaultArticles();
+            return;
+        }
+        
+        // Update tampilan artikel
+        updateArticlesDisplay(articles);
+    }
+
+    function setDefaultArticles() {
+    // Data default jika tidak ada data dari admin
+    const defaultArticles = [
+        { 
+            title: "Detik-detik Gempa M 6.9 dan Tsunami Guncang Jepang", 
+            category: "Berita Utama", 
+            image: "img/jepang.webp",
+            content: "Gempa bumi berkekuatan magnitudo 6,9 mengguncang Jepang disusul peringatan tsunami. Kejadian ini mengingatkan pentingnya sistem peringatan dini yang efektif untuk menyelamatkan ribuan nyawa.",
+            summary: "Gempa bumi berkekuatan magnitudo 6,9 mengguncang Jepang disusul peringatan tsunami...",
+            externalLink: "https://www.cnnindonesia.com/internasional/20240102123435-134-1044566/detik-detik-gempa-m-69-dan-tsunami-guncang-jepang",
+            date: new Date().toISOString(),
+            author: "Admin Waver"
+        },
+        { 
+            title: "Peringatan Tsunami Sedunia Dorong Edukasi dan Kewaspadaan Masyarakat", 
+            category: "Berita Utama", 
+            image: "img/rri.jpeg",
+            content: "Peringatan tsunami sedunia mengingatkan pentingnya edukasi dan kewaspadaan masyarakat terhadap potensi bencana tsunami di wilayah pesisir.",
+            summary: "Peringatan tsunami sedunia mengingatkan pentingnya edukasi dan kewaspadaan masyarakat...",
+            externalLink: "https://rri.co.id/ekonomi-dan-bisnis/411259/peringatan-tsunami-sedunia-dorong-edukasi-dan-kewaspadaan-masyarakat",
+            date: new Date(Date.now() - 86400000).toISOString(), // 1 hari lalu
+            author: "Admin Waver"
+        },
+        { 
+            title: "AVIRsinami: Teknologi Virtual Reality untuk Edukasi dan Simulasi Mitigasi Tsunami", 
+            category: "Teknologi", 
+            image: "img/brin.webp",
+            content: "BRIN mengembangkan AVIRsinami, teknologi Virtual Reality untuk edukasi dan simulasi mitigasi tsunami yang inovatif dan interaktif.",
+            summary: "BRIN mengembangkan AVIRsinami, teknologi Virtual Reality untuk edukasi dan simulasi mitigasi tsunami...",
+            externalLink: "https://www.brin.go.id/avirstunami-teknologi-virtual-reality-untuk-edukasi-dan-simulasi-mitigasi-tsunami/",
+            date: new Date(Date.now() - 172800000).toISOString(), // 2 hari lalu
+            author: "Admin Waver"
+        },
+        { 
+            title: "8 Tips Mitigasi Jika Terjadi Tsunami untuk Keselamatan Anda", 
+            category: "Tips & Edukasi", 
+            image: "img/satu.webp",
+            content: "Pelajari langkah-langkah penting yang harus dilakukan sebelum, selama, dan setelah tsunami untuk memastikan keselamatan Anda dan keluarga.",
+            summary: "Pelajari langkah-langkah penting yang harus dilakukan sebelum, selama, dan setelah tsunami...",
+            externalLink: "https://www.beritasatu.com/nasional/1179386/8-tips-mitigasi-jika-terjadi-tsunami-untuk-keselamatan-anda",
+            date: new Date(Date.now() - 259200000).toISOString(), // 3 hari lalu
+            author: "Admin Waver"
+        },
+        { 
+            title: "Ekspedisi Geosains Laut Resmi Dimulai untuk Mitigasi Bencana Serupa Tsunami Aceh 2004", 
+            category: "Penelitian", 
+            image: "img/geosains.jpg",
+            content: "Ekspedisi geosains laut dilakukan untuk mempelajari kondisi dasar laut guna mengantisipasi bencana serupa tsunami Aceh 2004.",
+            summary: "Ekspedisi geosains laut dilakukan untuk mempelajari kondisi dasar laut guna mengantisipasi bencana...",
+            externalLink: "https://www.brin.go.id/ekspedisi-geosains-laut-resmi-dimulai-untuk-mitigasi-bencana-serupa-tsunami-aceh-2004/",
+            date: new Date(Date.now() - 345600000).toISOString(), // 4 hari lalu
+            author: "Admin Tsuname"
+        },
+        { 
+            title: "Puluhan Pelajar SMA di Aceh Besar Ikuti Edukasi Mitigasi Bencana", 
+            category: "Edukasi", 
+            image: "img/mitigasi.webp",
+            content: "Program edukasi mitigasi bencana melibatkan puluhan pelajar SMA di Aceh Besar untuk meningkatkan kesiapsiagaan generasi muda.",
+            summary: "Program edukasi mitigasi bencana melibatkan puluhan pelajar SMA di Aceh Besar...",
+            externalLink: "https://www.antaranews.com/berita/4112595/puluhan-pelajar-sma-di-aceh-besar-ikuti-edukasi-mitigasi-bencana",
+            date: new Date(Date.now() - 432000000).toISOString(), // 5 hari lalu
+            author: "Admin Waver"
+        }
+    ];
+    
+    // Simpan data default ke localStorage
+    localStorage.setItem('articles', JSON.stringify(defaultArticles));
+    
+    // Update tampilan
+    updateArticlesDisplay(defaultArticles);
+}
+
+    function updateArticlesDisplay(articles) {
+        console.log('🔄 Memperbarui tampilan artikel dengan', articles.length, 'data');
+        
+        // Sort articles by date (newest first)
+        articles.sort((a, b) => new Date(b.date) - new Date(a.date));
+        
+        // Update featured article (most recent)
+        updateFeaturedArticle(articles[0]);
+        
+        // Update article grid
+        updateArticleGrid(articles.slice(1)); // Exclude the featured article
+    }
+
+   function updateFeaturedArticle(article) {
+    if (!article) return;
+    
+    const formattedDate = new Date(article.date).toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+    });
+    
+    featuredArticleContainer.innerHTML = `
+        <div class="featured-content">
+            <span class="article-category">${article.category}</span>
+            <h2>${article.title}</h2>
+            <p>${article.summary || article.content.substring(0, 200) + '...'}</p>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <i class="far fa-calendar"></i>
+                    <span>${formattedDate}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="far fa-user"></i>
+                    <span>${article.author || "Admin Waver"}</span>
+                </div>
+            </div>
+            <a href="${article.externalLink}" target="_blank" class="read-more">
+                Baca Selengkapnya
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+        <div class="featured-image" data-aos="zoom-in" data-aos-delay="300">
+            <img src="${article.image}" alt="${article.title}" />
+        </div>
+    `;
+}
+
+    function updateArticleGrid(articles) {
+        // Kosongkan container
+        articleGridContainer.innerHTML = '';
+        
+        if (articles.length === 0) {
+            articleGridContainer.innerHTML = `
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px;">
+                    <i class="fas fa-newspaper" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                    <h4>Belum Ada Artikel</h4>
+                    <p>Belum ada artikel yang tersedia saat ini.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Tampilkan semua artikel
+        articles.forEach((article, index) => {
+            const articleCard = createArticleCard(article, index);
+            articleGridContainer.appendChild(articleCard);
+        });
+    }
+
+    function createArticleCard(article, index) {
+    const div = document.createElement("div");
+    div.classList.add("card-article");
+    div.setAttribute("data-aos", "zoom-in");
+    div.setAttribute("data-aos-delay", (index * 100).toString());
+
+    const formattedDate = new Date(article.date).toLocaleDateString('id-ID', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric'
+    });
+
+    // Estimate reading time (approx 200 words per minute)
+    const wordCount = article.content.split(' ').length;
+    const readingTime = Math.ceil(wordCount / 200);
+
+    div.innerHTML = `
+        <div class="article-image-container">
+            <img src="${article.image}" alt="${article.title}" class="article-image" />
+        </div>
+        <div class="card-body">
+            <span class="article-category">${article.category}</span>
+            <h5>${article.title}</h5>
+            <div class="article-meta">
+                <div class="meta-item">
+                    <i class="far fa-calendar"></i>
+                    <span>${formattedDate}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="far fa-clock"></i>
+                    <span>${readingTime} min read</span>
+                </div>
+            </div>
+            <p>${article.summary || article.content.substring(0, 120) + '...'}</p>
+            <a href="${article.externalLink}" target="_blank" class="read-more">
+                Baca Selengkapnya
+                <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    `;
+    
+    return div;
+}
+
+    // === AUTO REFRESH DATA ===
+    function startDataPolling() {
+        // Cek perubahan data setiap 3 detik
+        setInterval(() => {
+            const currentData = JSON.parse(localStorage.getItem('articles') || '[]');
+            const lastData = window.lastArticleData || [];
+            
+            // Jika ada perubahan data, refresh
+            if (JSON.stringify(currentData) !== JSON.stringify(lastData)) {
+                console.log('🔄 Data artikel berubah, melakukan refresh...');
+                loadArticles();
+                window.lastArticleData = currentData;
+            }
+        }, 3000);
+    }
+
     // Check Notification on Page Load
     window.addEventListener("DOMContentLoaded", () => {
-      const notifActive = localStorage.getItem("notifActive");
-      const notifClosed = localStorage.getItem("notifClosed");
+        const notifActive = localStorage.getItem("notifActive");
+        const notifClosed = localStorage.getItem("notifClosed");
 
-      if ((notifActive === "true" && notifClosed === "false") || 
-          (notifActive === null && notifClosed === null)) {
-        showNotification();
-      } else {
-        notif.style.display = "none";
-        navbar.classList.remove("notif-active");
-        hero.classList.remove("notif-active");
-      }
+        if ((notifActive === "true" && notifClosed === "false") || 
+            (notifActive === null && notifClosed === null)) {
+            showNotification();
+        } else {
+            notif.style.display = "none";
+            navbar.classList.remove("notif-active");
+            hero.classList.remove("notif-active");
+        }
+        
+        // Load articles data
+        loadArticles();
+        startDataPolling();
     });
   </script>
 </body>

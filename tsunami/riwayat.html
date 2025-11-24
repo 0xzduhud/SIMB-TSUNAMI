@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tsuname — Riwayat Kejadian Tsunami</title>
+    <title>Waver — Riwayat Kejadian Tsunami</title>
 
     <!-- FONT & LIBRARY -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -666,8 +666,8 @@
 
     <!-- ===== FOOTER ===== -->
     <footer data-aos="fade-up">
-      <h4>Tsuname Project © 2025</h4>
-      <p>Created by Tsuname | Stay Safe, Stay Prepared</p>
+      <h4>Waver Project © 2025</h4>
+      <p>Created by Waver | Stay Safe, Stay Prepared</p>
     </footer>
 
     <!-- ===== BACK TO TOP BUTTON ===== -->
@@ -675,19 +675,156 @@
       <i class="fas fa-arrow-up"></i>
     </button>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-      AOS.init({ duration: 1000, once: true });
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 1000, once: true });
 
-      const navbar = document.getElementById("navbar");
-      const hero = document.getElementById("hero");
-      const notif = document.getElementById("notification");
-      const closeNotifBtn = document.getElementById("closeNotifBtn");
-      const backToTop = document.getElementById("backToTop");
-      const scrollProgress = document.getElementById("scrollProgress");
+    const navbar = document.getElementById("navbar");
+    const hero = document.getElementById("hero");
+    const notif = document.getElementById("notification");
+    const closeNotifBtn = document.getElementById("closeNotifBtn");
+    const backToTop = document.getElementById("backToTop");
+    const scrollProgress = document.getElementById("scrollProgress");
 
-      // === SCROLL EFFECTS ===
-      window.addEventListener("scroll", () => {
+    // === LOAD DATA DARI LOCALSTORAGE ===
+    function loadIncidentsData() {
+        const incidentsData = JSON.parse(localStorage.getItem('userIncidentsData')) || [];
+        const statsData = JSON.parse(localStorage.getItem('userIncidentsStats')) || {};
+        
+        console.log('📥 Loading data dari localStorage:', {
+            incidentsCount: incidentsData.length,
+            stats: statsData
+        });
+        
+        // Jika tidak ada data dari admin, gunakan data default
+        if (incidentsData.length === 0) {
+            console.log('ℹ️ Tidak ada data dari admin, menggunakan data default');
+            setDefaultData();
+            return;
+        }
+        
+        // Update tabel
+        updateIncidentsTable(incidentsData);
+        
+        // Update statistik
+        updateStatistics(statsData);
+        
+        console.log('✅ Data berhasil dimuat');
+    }
+
+    function setDefaultData() {
+        // Data default jika tidak ada data dari admin
+        const defaultIncidents = [
+            {
+                tanggal: "10 Nov 2025",
+                lokasi: "Palu, Sulawesi Tengah",
+                magnitudo: "6.9 SR",
+                status: '<span class="status-badge status-aktif">Aktif</span>',
+                volunteer: '<button class="daftar-btn" onclick="daftarVolunteer(\'Palu\')"><i class="fas fa-user-plus"></i> Daftar</button>'
+            },
+            {
+                tanggal: "05 Nov 2025",
+                lokasi: "Mentawai, Sumatera Barat",
+                magnitudo: "7.1 SR",
+                status: '<span class="status-badge status-pemantauan">Pemantauan</span>',
+                volunteer: '<button class="daftar-btn" onclick="daftarVolunteer(\'Mentawai\')"><i class="fas fa-user-plus"></i> Daftar</button>'
+            },
+            {
+                tanggal: "30 Okt 2025",
+                lokasi: "Aceh Besar",
+                magnitudo: "6.8 SR",
+                status: '<span class="status-badge status-selesai">Selesai</span>',
+                volunteer: '<button class="daftar-btn" disabled><i class="fas fa-ban"></i> Tidak Tersedia</button>'
+            },
+            {
+                tanggal: "25 Okt 2025",
+                lokasi: "Bengkulu",
+                magnitudo: "6.5 SR",
+                status: '<span class="status-badge status-selesai">Selesai</span>',
+                volunteer: '<button class="daftar-btn" disabled><i class="fas fa-ban"></i> Tidak Tersedia</button>'
+            },
+            {
+                tanggal: "18 Okt 2025",
+                lokasi: "Selat Sunda",
+                magnitudo: "6.7 SR",
+                status: '<span class="status-badge status-selesai">Selesai</span>',
+                volunteer: '<button class="daftar-btn" disabled><i class="fas fa-ban"></i> Tidak Tersedia</button>'
+            }
+        ];
+        
+        const defaultStats = {
+            total: 5,
+            active: 1,
+            monitoring: 1,
+            completed: 3
+        };
+        
+        updateIncidentsTable(defaultIncidents);
+        updateStatistics(defaultStats);
+    }
+
+    function updateIncidentsTable(incidents) {
+        const tableBody = document.getElementById('riwayat-table');
+        tableBody.innerHTML = '';
+        
+        console.log('🔄 Memperbarui tabel dengan', incidents.length, 'data kejadian');
+        
+        if (incidents.length === 0) {
+            tableBody.innerHTML = `
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 30px;">
+                        <i class="fas fa-info-circle" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                        <p style="color: #666; font-size: 16px;">Belum ada data kejadian tsunami</p>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+        
+        incidents.forEach((incident, index) => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${incident.tanggal}</td>
+                <td>${incident.lokasi}</td>
+                <td>${incident.magnitudo}</td>
+                <td>${incident.status}</td>
+                <td>${incident.volunteer}</td>
+            `;
+            tableBody.appendChild(row);
+        });
+    }
+
+    function updateStatistics(stats) {
+        console.log('📊 Memperbarui statistik:', stats);
+        
+        // Update stat cards
+        const totalElement = document.querySelector('.stats-grid .stat-card:nth-child(1) .stat-value');
+        const monitoringElement = document.querySelector('.stats-grid .stat-card:nth-child(2) .stat-value');
+        const completedElement = document.querySelector('.stats-grid .stat-card:nth-child(3) .stat-value');
+        
+        if (totalElement) totalElement.textContent = stats.total || 0;
+        if (monitoringElement) monitoringElement.textContent = stats.monitoring || 0;
+        if (completedElement) completedElement.textContent = stats.completed || 0;
+    }
+
+    // === AUTO REFRESH DATA ===
+    function startDataPolling() {
+        // Cek perubahan data setiap 2 detik
+        setInterval(() => {
+            const currentData = JSON.parse(localStorage.getItem('userIncidentsData') || '[]');
+            const lastData = window.lastIncidentsData || [];
+            
+            // Jika ada perubahan data, refresh
+            if (JSON.stringify(currentData) !== JSON.stringify(lastData)) {
+                console.log('🔄 Data berubah, melakukan refresh...');
+                loadIncidentsData();
+                window.lastIncidentsData = currentData;
+            }
+        }, 2000);
+    }
+
+    // === SCROLL EFFECTS ===
+    window.addEventListener("scroll", () => {
         const scrollY = window.scrollY;
         
         // Navbar scroll effect
@@ -701,40 +838,42 @@
         const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         const scrolled = (winScroll / height) * 100;
         if (scrollProgress) {
-          scrollProgress.style.width = scrolled + "%";
+            scrollProgress.style.width = scrolled + "%";
         }
-      });
+    });
 
-      // === BACK TO TOP FUNCTION ===
-      backToTop.addEventListener("click", () => {
+    // === BACK TO TOP FUNCTION ===
+    backToTop.addEventListener("click", () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
-      });
+    });
 
-      // === FUNGSI MENAMPILKAN NOTIFIKASI ===
-      function showNotification() {
+    // === FUNGSI MENAMPILKAN NOTIFIKASI ===
+    function showNotification() {
         notif.style.display = "block";
         navbar.classList.add("notif-active");
         hero.classList.add("notif-active");
-      }
+    }
 
-      // === FUNGSI CLOSE NOTIFIKASI ===
-      function closeNotification() {
+    // === FUNGSI CLOSE NOTIFIKASI ===
+    function closeNotification() {
         notif.style.transition = "opacity 0.5s ease";
         notif.style.opacity = "0";
         setTimeout(() => {
-          notif.style.display = "none";
-          notif.style.opacity = "1";
-          navbar.classList.remove("notif-active");
-          hero.classList.remove("notif-active");
+            notif.style.display = "none";
+            notif.style.opacity = "1";
+            navbar.classList.remove("notif-active");
+            hero.classList.remove("notif-active");
         }, 500);
         localStorage.setItem("notifClosed", "true");
         localStorage.setItem("notifActive", "false");
-      }
+    }
 
-      closeNotifBtn.addEventListener("click", closeNotification);
+    closeNotifBtn.addEventListener("click", closeNotification);
 
-      // === CEK NOTIFIKASI SAAT HALAMAN DIMUAT ===
-      window.addEventListener("DOMContentLoaded", () => {
+    // === CEK NOTIFIKASI SAAT HALAMAN DIMUAT ===
+    window.addEventListener("DOMContentLoaded", () => {
+        console.log('🎯 Halaman riwayat dimuat');
+        
         const notifActive = localStorage.getItem("notifActive");
         const notifClosed = localStorage.getItem("notifClosed");
 
@@ -743,32 +882,46 @@
         // 2. Atau jika belum ada data di localStorage
         if ((notifActive === "true" && notifClosed === "false") || 
             (notifActive === null && notifClosed === null)) {
-          showNotification();
+            showNotification();
         } else {
-          notif.style.display = "none";
-          navbar.classList.remove("notif-active");
-          hero.classList.remove("notif-active");
+            notif.style.display = "none";
+            navbar.classList.remove("notif-active");
+            hero.classList.remove("notif-active");
         }
-      });
+        
+        // Load data incidents
+        loadIncidentsData();
+        
+        // Mulai auto refresh
+        startDataPolling();
+        
+        // Simpan data untuk volunteer
+        simpanRiwayat();
+    });
 
-      // === Fungsi untuk simpan data ke localStorage agar volunteer.html bisa membaca ===
-      function simpanRiwayat() {
-        const data = [
-          { lokasi: "Palu", status: "Aktif", waktu: "2025-11-10 08:00" },
-          { lokasi: "Mentawai", status: "Pemantauan", waktu: "2025-11-05 19:00" },
-          { lokasi: "Aceh Besar", status: "Selesai", waktu: "2025-10-30 13:00" }
-        ];
+    // === Fungsi untuk simpan data ke localStorage agar volunteer.html bisa membaca ===
+    function simpanRiwayat() {
+        const incidentsData = JSON.parse(localStorage.getItem('userIncidentsData')) || [];
+        const data = incidentsData.map(incident => {
+            let status = "Selesai";
+            if (incident.status.includes('status-aktif')) status = "Aktif";
+            else if (incident.status.includes('status-pemantauan')) status = "Pemantauan";
+            
+            return { 
+                lokasi: incident.lokasi, 
+                status: status, 
+                waktu: new Date().toISOString() 
+            };
+        });
+        
         localStorage.setItem("riwayatTsunami", JSON.stringify(data));
-      }
+    }
 
-      // Simpan otomatis saat halaman dibuka
-      simpanRiwayat();
-
-      // === Fungsi untuk menuju halaman volunteer ===
-      function daftarVolunteer(lokasi) {
+    // === Fungsi untuk menuju halaman volunteer ===
+    function daftarVolunteer(lokasi) {
         alert("Anda akan diarahkan untuk mendaftar volunteer di lokasi: " + lokasi);
         window.location.href = "volunteer.html?lokasi=" + encodeURIComponent(lokasi);
-      }
-    </script>
+    }
+</script>
   </body>
 </html>

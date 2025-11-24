@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tsuname — Volunteer Tsunami</title>
+  <title>Waver — Volunteer Tsunami</title>
 
   <!-- FONT & LIBRARY -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -425,12 +425,14 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
+      text-decoration: none;
     }
 
     .volunteer-btn:hover {
       transform: translateY(-3px);
       box-shadow: 0 10px 25px rgba(0, 87, 255, 0.3);
       background: linear-gradient(135deg, var(--secondary), var(--primary));
+      color: white;
     }
 
     .volunteer-btn:disabled {
@@ -438,78 +440,6 @@
       cursor: not-allowed;
       transform: none;
       box-shadow: none;
-    }
-
-    /* ===== VOLUNTEER FORM ===== */
-    .volunteer-form-section {
-      background: linear-gradient(135deg, #f8faff 0%, #e6f0ff 100%);
-      padding: 60px 40px;
-      border-radius: 30px;
-      margin-top: 60px;
-    }
-
-    .volunteer-form {
-      display: flex;
-      flex-direction: column;
-      gap: 25px;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .form-group label {
-      font-weight: 600;
-      color: var(--dark);
-      font-size: 16px;
-    }
-
-    .volunteer-form input,
-    .volunteer-form textarea,
-    .volunteer-form select {
-      padding: 18px 20px;
-      border-radius: 15px;
-      border: 2px solid #e0e0e0;
-      font-size: 16px;
-      resize: none;
-      transition: all 0.3s ease;
-      font-family: "Inter", sans-serif;
-    }
-
-    .volunteer-form input:focus,
-    .volunteer-form textarea:focus,
-    .volunteer-form select:focus {
-      border-color: var(--primary);
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(0, 87, 255, 0.1);
-      transform: translateY(-2px);
-    }
-
-    .submit-btn {
-      padding: 18px 30px;
-      border-radius: 50px;
-      border: none;
-      background: linear-gradient(135deg, var(--primary), var(--secondary));
-      color: white;
-      font-weight: 700;
-      font-size: 18px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .submit-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(0, 87, 255, 0.3);
-      background: linear-gradient(135deg, var(--secondary), var(--primary));
     }
 
     /* ===== FOOTER ===== */
@@ -615,10 +545,6 @@
         font-size: 24px;
       }
 
-      .volunteer-form-section {
-        padding: 40px 20px;
-      }
-
       .lokasi-grid {
         grid-template-columns: 1fr;
       }
@@ -715,7 +641,7 @@
     <!-- Volunteer Intro -->
     <section class="content-container volunteer-intro" data-aos="fade-up">
       <h2>Mengapa Menjadi Volunteer?</h2>
-      <p>Sebagai volunteer Tsuname, Anda akan menjadi bagian dari sistem peringatan dini tsunami yang menyelamatkan nyawa dan membantu masyarakat pesisir.</p>
+      <p>Sebagai volunteer Waver, Anda akan menjadi bagian dari sistem peringatan dini tsunami yang menyelamatkan nyawa dan membantu masyarakat pesisir.</p>
       
       <div class="benefits-grid">
         <div class="benefit-card" data-aos="zoom-in" data-aos-delay="100">
@@ -753,55 +679,12 @@
         <!-- Lokasi items will be dynamically inserted here -->
       </div>
     </section>
-
-    <!-- Volunteer Form -->
-    <section class="volunteer-form-section" id="volunteerFormSection" style="display:none;" data-aos="fade-up">
-      <h2>Form Pendaftaran Volunteer</h2>
-      <p>Isi form berikut untuk mendaftar sebagai volunteer Tsuname.</p>
-
-      <form class="volunteer-form" id="volunteerForm">
-        <div class="form-group">
-          <label for="nama">Nama Lengkap</label>
-          <input type="text" id="nama" placeholder="Masukkan nama lengkap" required />
-        </div>
-        
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="Masukkan alamat email" required />
-        </div>
-        
-        <div class="form-group">
-          <label for="telepon">Nomor Telepon</label>
-          <input type="text" id="telepon" placeholder="Masukkan nomor telepon" required />
-        </div>
-        
-        <div class="form-group">
-          <label for="lokasi">Lokasi yang Dipilih</label>
-          <input type="text" id="lokasi" readonly />
-        </div>
-        
-        <div class="form-group">
-          <label for="alasan">Alasan Menjadi Volunteer</label>
-          <textarea id="alasan" rows="5" placeholder="Ceritakan mengapa Anda ingin menjadi volunteer Tsuname..." required></textarea>
-        </div>
-        
-        <div class="form-group">
-          <label for="pengalaman">Pengalaman Terkait (opsional)</label>
-          <textarea id="pengalaman" rows="3" placeholder="Pengalaman dalam penanggulangan bencana, pertolongan pertama, dll."></textarea>
-        </div>
-        
-        <button type="submit" class="submit-btn">
-          <i class="fas fa-paper-plane"></i>
-          Kirim Pendaftaran
-        </button>
-      </form>
-    </section>
   </main>
 
   <!-- ===== FOOTER ===== -->
   <footer data-aos="fade-up">
-    <h4>Tsuname Project © 2025</h4>
-    <p>Created by Tsuname | Stay Safe, Stay Prepared</p>
+    <h4>Waver Project © 2025</h4>
+    <p>Created by Waver | Stay Safe, Stay Prepared</p>
   </footer>
 
   <button id="backToTop" aria-label="Kembali ke atas">↑</button>
@@ -825,9 +708,6 @@
     const backToTop = document.getElementById("backToTop");
     const scrollProgress = document.getElementById("scrollProgress");
     const lokasiListDiv = document.getElementById("lokasiList");
-    const volunteerFormSection = document.getElementById("volunteerFormSection");
-    const volunteerForm = document.getElementById("volunteerForm");
-    const lokasiInput = document.getElementById("lokasi");
 
     // Scroll Effects
     window.addEventListener("scroll", () => {
@@ -884,140 +764,260 @@
         navbar.classList.remove("notif-active");
         hero.classList.remove("notif-active");
       }
+      
+      // Load volunteer data
+      loadVolunteerData();
+      startDataPolling();
     });
 
-    // ===== VOLUNTEER FUNCTIONALITY =====
-    // Data lengkap sesuai dengan halaman riwayat (5 kejadian)
-    const volunteerData = [
-      { 
-        lokasi: "Palu, Sulawesi Tengah", 
-        status: "Aktif",
-        kebutuhan: "15 Volunteer",
-        durasi: "3 Bulan",
-        tersedia: true
-      },
-      { 
-        lokasi: "Mentawai, Sumatera Barat", 
-        status: "Dalam Pemantauan", 
-        kebutuhan: "10 Volunteer",
-        durasi: "2 Bulan",
-        tersedia: true
-      },
-      { 
-        lokasi: "Aceh Besar, NAD", 
-        status: "Selesai",
-        kebutuhan: "0 Volunteer",
-        durasi: "Selesai",
-        tersedia: false
-      },
-      { 
-        lokasi: "Bengkulu", 
-        status: "Selesai",
-        kebutuhan: "0 Volunteer",
-        durasi: "Selesai",
-        tersedia: false
-      },
-      { 
-        lokasi: "Selat Sunda", 
-        status: "Selesai",
-        kebutuhan: "0 Volunteer",
-        durasi: "Selesai",
-        tersedia: false
-      }
-    ];
-
-    // Tampilkan semua 5 data lokasi volunteer
-    volunteerData.forEach(item => {
-      const div = createLocationItem(item);
-      lokasiListDiv.appendChild(div);
-    });
-
-    function createLocationItem(item) {
-      const div = document.createElement("div");
-      div.classList.add("lokasi-item");
-      div.setAttribute("data-aos", "zoom-in");
-
-      if (item.tersedia) {
-        div.innerHTML = `
-          <div class="lokasi-header">
-            <h4>${item.lokasi}</h4>
-            <span class="status-badge status-available">Tersedia</span>
-          </div>
-          <div class="lokasi-info">
-            <div class="info-item">
-              <i class="fas fa-users"></i>
-              <span>${item.kebutuhan}</span>
-            </div>
-            <div class="info-item">
-              <i class="fas fa-clock"></i>
-              <span>${item.durasi}</span>
-            </div>
-          </div>
-          <p>Bergabunglah sebagai volunteer untuk membantu masyarakat di ${item.lokasi} dalam menghadapi potensi tsunami.</p>
-          <button class="volunteer-btn" onclick="bukaForm('${item.lokasi}')">
-            <i class="fas fa-user-plus"></i>
-            Daftar Sekarang
-          </button>
-        `;
-      } else {
-        div.innerHTML = `
-          <div class="lokasi-header">
-            <h4>${item.lokasi}</h4>
-            <span class="status-badge status-closed">Ditutup</span>
-          </div>
-          <div class="lokasi-info">
-            <div class="info-item">
-              <i class="fas fa-users"></i>
-              <span>${item.kebutuhan}</span>
-            </div>
-            <div class="info-item">
-              <i class="fas fa-clock"></i>
-              <span>${item.durasi}</span>
-            </div>
-          </div>
-          <p>Program volunteer di ${item.lokasi} sudah selesai. Terima kasih atas partisipasinya.</p>
-          <button class="volunteer-btn" disabled>
-            <i class="fas fa-times"></i>
-            Pendaftaran Ditutup
-          </button>
-        `;
-      }
-      return div;
+    // ===== VOLUNTEER FUNCTIONALITY - TERINTEGRASI DENGAN ADMIN ====
+    function loadVolunteerData() {
+        console.log('📥 Memuat data volunteer dari localStorage...');
+        
+        const incidentsData = JSON.parse(localStorage.getItem('userIncidentsData')) || [];
+        const statsData = JSON.parse(localStorage.getItem('userIncidentsStats')) || {};
+        
+        console.log('📊 Data yang ditemukan:', {
+            incidentsCount: incidentsData.length,
+            stats: statsData
+        });
+        
+        // Jika tidak ada data dari admin, gunakan data default
+        if (incidentsData.length === 0) {
+            console.log('ℹ️ Tidak ada data dari admin, menggunakan data default');
+            setDefaultVolunteerData();
+            return;
+        }
+        
+        // Format data untuk volunteer
+        const volunteerData = incidentsData.map(incident => {
+            // Ekstrak status dari HTML string
+            let status = "Selesai";
+            let tersedia = false;
+            let kebutuhan = "0 Volunteer";
+            let durasi = "Selesai";
+            
+            if (incident.status.includes('status-aktif')) {
+                status = "Aktif";
+                tersedia = true;
+                kebutuhan = "15 Volunteer";
+                durasi = "3 Bulan";
+            } else if (incident.status.includes('status-pemantauan')) {
+                status = "Dalam Pemantauan";
+                tersedia = true;
+                kebutuhan = "10 Volunteer";
+                durasi = "2 Bulan";
+            }
+            
+            return {
+                lokasi: incident.lokasi,
+                status: status,
+                kebutuhan: kebutuhan,
+                durasi: durasi,
+                tersedia: tersedia,
+                magnitudo: incident.magnitudo,
+                tanggal: incident.tanggal
+            };
+        });
+        
+        // Update tampilan
+        updateVolunteerDisplay(volunteerData, statsData);
     }
 
-    function bukaForm(lokasi) {
-      lokasiInput.value = lokasi;
-      volunteerFormSection.style.display = "block";
-      window.scrollTo({ top: volunteerFormSection.offsetTop - 100, behavior: "smooth" });
+    function setDefaultVolunteerData() {
+        // Data default jika tidak ada data dari admin
+        const defaultVolunteerData = [
+            { 
+                lokasi: "Palu, Sulawesi Tengah", 
+                status: "Aktif",
+                kebutuhan: "15 Volunteer",
+                durasi: "3 Bulan",
+                tersedia: true,
+                magnitudo: "6.9 SR",
+                tanggal: "10 Nov 2025"
+            },
+            { 
+                lokasi: "Mentawai, Sumatera Barat", 
+                status: "Dalam Pemantauan", 
+                kebutuhan: "10 Volunteer",
+                durasi: "2 Bulan",
+                tersedia: true,
+                magnitudo: "7.1 SR",
+                tanggal: "05 Nov 2025"
+            },
+            { 
+                lokasi: "Aceh Besar, NAD", 
+                status: "Selesai",
+                kebutuhan: "0 Volunteer",
+                durasi: "Selesai",
+                tersedia: false,
+                magnitudo: "6.8 SR",
+                tanggal: "30 Okt 2025"
+            },
+            { 
+                lokasi: "Bengkulu", 
+                status: "Selesai",
+                kebutuhan: "0 Volunteer",
+                durasi: "Selesai",
+                tersedia: false,
+                magnitudo: "6.5 SR",
+                tanggal: "25 Okt 2025"
+            },
+            { 
+                lokasi: "Selat Sunda", 
+                status: "Selesai",
+                kebutuhan: "0 Volunteer",
+                durasi: "Selesai",
+                tersedia: false,
+                magnitudo: "6.7 SR",
+                tanggal: "18 Okt 2025"
+            }
+        ];
+        
+        const defaultStats = {
+            total: 5,
+            active: 1,
+            monitoring: 1,
+            completed: 3
+        };
+        
+        updateVolunteerDisplay(defaultVolunteerData, defaultStats);
     }
 
-    // Handle form submission
-    volunteerForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Simpan data volunteer ke localStorage
-      const formData = {
-        nama: document.getElementById('nama').value,
-        email: document.getElementById('email').value,
-        telepon: document.getElementById('telepon').value,
-        lokasi: document.getElementById('lokasi').value,
-        alasan: document.getElementById('alasan').value,
-        pengalaman: document.getElementById('pengalaman').value,
-        tanggalDaftar: new Date().toISOString()
-      };
-      
-      // Simpan ke localStorage
-      const existingVolunteers = JSON.parse(localStorage.getItem('volunteers')) || [];
-      existingVolunteers.push(formData);
-      localStorage.setItem('volunteers', JSON.stringify(existingVolunteers));
-      
-      alert('Terima kasih! Pendaftaran volunteer Anda telah berhasil dikirim. Tim kami akan menghubungi Anda dalam 1-2 hari kerja.');
-      this.reset();
-      volunteerFormSection.style.display = 'none';
-      
-      // Scroll kembali ke atas
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    function updateVolunteerDisplay(volunteerData, statsData) {
+        console.log('🔄 Memperbarui tampilan volunteer dengan', volunteerData.length, 'data');
+        
+        // Kosongkan container
+        lokasiListDiv.innerHTML = '';
+        
+        if (volunteerData.length === 0) {
+            lokasiListDiv.innerHTML = `
+                <div class="lokasi-item" style="grid-column: 1 / -1; text-align: center;">
+                    <i class="fas fa-info-circle" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+                    <h4>Belum Ada Lokasi Volunteer</h4>
+                    <p>Belum ada kejadian tsunami yang membutuhkan volunteer saat ini.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Tampilkan semua data volunteer
+        volunteerData.forEach((item, index) => {
+            const div = createLocationItem(item, index);
+            lokasiListDiv.appendChild(div);
+        });
+        
+        // Update statistik jika diperlukan
+        updateVolunteerStats(statsData);
+    }
+
+    function createLocationItem(item, index) {
+        const div = document.createElement("div");
+        div.classList.add("lokasi-item");
+        div.setAttribute("data-aos", "zoom-in");
+        div.setAttribute("data-aos-delay", (index * 100).toString());
+
+        if (item.tersedia) {
+            div.innerHTML = `
+                <div class="lokasi-header">
+                    <h4>${item.lokasi}</h4>
+                    <span class="status-badge status-available">${item.status}</span>
+                </div>
+                <div class="lokasi-info">
+                    <div class="info-item">
+                        <i class="fas fa-users"></i>
+                        <span>${item.kebutuhan}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>${item.durasi}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-wave-square"></i>
+                        <span>${item.magnitudo}</span>
+                    </div>
+                </div>
+                <p>Bergabunglah sebagai volunteer untuk membantu masyarakat di ${item.lokasi} dalam menghadapi potensi tsunami.</p>
+                <p><small><strong>Tanggal Kejadian:</strong> ${item.tanggal}</small></p>
+                <a href="pendaftaran_volunteer.html?lokasi=${encodeURIComponent(item.lokasi)}" class="volunteer-btn">
+                    <i class="fas fa-user-plus"></i>
+                    Daftar Sekarang
+                </a>
+            `;
+        } else {
+            div.innerHTML = `
+                <div class="lokasi-header">
+                    <h4>${item.lokasi}</h4>
+                    <span class="status-badge status-closed">${item.status}</span>
+                </div>
+                <div class="lokasi-info">
+                    <div class="info-item">
+                        <i class="fas fa-users"></i>
+                        <span>${item.kebutuhan}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-clock"></i>
+                        <span>${item.durasi}</span>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-wave-square"></i>
+                        <span>${item.magnitudo}</span>
+                    </div>
+                </div>
+                <p>Program volunteer di ${item.lokasi} sudah selesai. Terima kasih atas partisipasinya.</p>
+                <p><small><strong>Tanggal Kejadian:</strong> ${item.tanggal}</small></p>
+                <button class="volunteer-btn" disabled>
+                    <i class="fas fa-times"></i>
+                    Pendaftaran Ditutup
+                </button>
+            `;
+        }
+        return div;
+    }
+
+    function updateVolunteerStats(statsData) {
+        console.log('📈 Statistik volunteer:', statsData);
+        // Anda bisa menambahkan update statistik di sini jika diperlukan
+    }
+
+    // === AUTO REFRESH DATA ===
+    function startDataPolling() {
+        // Cek perubahan data setiap 3 detik
+        setInterval(() => {
+            const currentData = JSON.parse(localStorage.getItem('userIncidentsData') || '[]');
+            const lastData = window.lastVolunteerData || [];
+            
+            // Jika ada perubahan data, refresh
+            if (JSON.stringify(currentData) !== JSON.stringify(lastData)) {
+                console.log('🔄 Data volunteer berubah, melakukan refresh...');
+                loadVolunteerData();
+                window.lastVolunteerData = currentData;
+            }
+        }, 3000);
+    }
+
+    // === FUNGSI UNTUK SIMPAN DATA VOLUNTEER ===
+    function simpanDataVolunteer() {
+        const volunteerData = JSON.parse(localStorage.getItem('userIncidentsData')) || [];
+        const data = volunteerData.map(item => {
+            let status = "Selesai";
+            if (item.status.includes('status-aktif')) status = "Aktif";
+            else if (item.status.includes('status-pemantauan')) status = "Pemantauan";
+            
+            return { 
+                lokasi: item.lokasi, 
+                status: status, 
+                magnitudo: item.magnitudo,
+                tanggal: item.tanggal,
+                waktu: new Date().toISOString() 
+            };
+        });
+        
+        localStorage.setItem("volunteerTsunamiData", JSON.stringify(data));
+    }
+
+    // Simpan data volunteer saat halaman dimuat
+    simpanDataVolunteer();
   </script>
 </body>
 </html>
