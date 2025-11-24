@@ -569,6 +569,7 @@
       <a href="artikel.php">Artikel</a>
       <a href="volunteer.php">Volunter</a>
       <a href="about.php">Tentang</a>
+      <a href="admin_login.php">Login (Admin)</a>
     </nav>
   </header>
 
@@ -841,3 +842,4 @@ function deleteIncident(index) {
   </script>
 </body>
 </html>
+
