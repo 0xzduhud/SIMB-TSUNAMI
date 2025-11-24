@@ -1,9 +1,16 @@
+<?php
+include "koneksi.php";
+
+// Query untuk mengambil data kejadian dari database
+$query = "SELECT * FROM kejadian ORDER BY tanggal DESC";
+$result = mysqli_query($conn, $query);
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Waver — Volunteer Tsunami</title>
+  <title>Waver – Volunteer Tsunami</title>
 
   <!-- FONT & LIBRARY -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -392,6 +399,12 @@
       border: 1px solid var(--danger);
     }
 
+    .status-monitoring {
+      background: rgba(255, 193, 7, 0.1);
+      color: var(--warning);
+      border: 1px solid var(--warning);
+    }
+
     .lokasi-info {
       display: flex;
       gap: 20px;
@@ -608,7 +621,7 @@
 
   <!-- ===== NOTIFICATION BAR ===== -->
   <div id="notification" role="alert" aria-live="assertive">
-    ⚠️ PERINGATAN DARURAT! Tsunami terdeteksi — Perkiraan tiba dalam 20 menit di Palu!
+    ⚠️ PERINGATAN DARURAT! Tsunami terdeteksi – Perkiraan tiba dalam 20 menit di Palu!
     <button class="close-btn" id="closeNotifBtn" aria-label="Tutup notifikasi">×</button>
   </div>
 
@@ -622,7 +635,7 @@
       <a href="riwayat.html">Riwayat</a>
       <a href="maps2.html">Pantau</a>
       <a href="artikel.html">Artikel</a>
-      <a href="volunteer.html" style="color: #a9d6ff;">Volunter</a>
+      <a href="volunteer.php" style="color: #a9d6ff;">Volunter</a>
       <a href="about.html">Tentang</a>
     </nav>
   </header>
@@ -675,8 +688,97 @@
       <h2>Lokasi yang Membutuhkan Volunteer</h2>
       <p>Pilih lokasi di mana Anda ingin berkontribusi sebagai volunteer tsunami.</p>
 
-      <div class="lokasi-grid" id="lokasiList">
-        <!-- Lokasi items will be dynamically inserted here -->
+      <div class="lokasi-grid">
+        <?php
+        if (mysqli_num_rows($result) > 0) {
+          $index = 0;
+          while ($row = mysqli_fetch_assoc($result)) {
+            // Hitung jumlah volunteer yang sudah mendaftar untuk kejadian ini
+            $id_kejadian = $row['id_kejadian'];
+            $query_volunteer = "SELECT COUNT(*) as total FROM volunteer WHERE id_kejadian = $id_kejadian";
+            $result_volunteer = mysqli_query($conn, $query_volunteer);
+            $volunteer_data = mysqli_fetch_assoc($result_volunteer);
+            $total_volunteer = $volunteer_data['total'];
+            
+            // Tentukan status badge
+            $status = $row['status'];
+            $status_class = '';
+            $status_text = '';
+            $tersedia = false;
+            
+            if (strtolower($status) == 'aktif') {
+              $status_class = 'status-available';
+              $status_text = 'Aktif';
+              $tersedia = true;
+            } elseif (strtolower($status) == 'pemantauan' || strtolower($status) == 'dalam pemantauan') {
+              $status_class = 'status-monitoring';
+              $status_text = 'Dalam Pemantauan';
+              $tersedia = true;
+            } else {
+              $status_class = 'status-closed';
+              $status_text = 'Selesai';
+              $tersedia = false;
+            }
+            
+            // Format tanggal
+            $tanggal = date('d M Y', strtotime($row['tanggal']));
+            
+            // Format magnitudo
+            $magnitudo = $row['magnitudo'] . ' SR';
+            
+            // Lokasi
+            $lokasi = $row['lokasi'];
+            
+            // Delay untuk animasi
+            $delay = $index * 100;
+        ?>
+        
+        <div class="lokasi-item" data-aos="zoom-in" data-aos-delay="<?php echo $delay; ?>">
+          <div class="lokasi-header">
+            <h4><?php echo htmlspecialchars($lokasi); ?></h4>
+            <span class="status-badge <?php echo $status_class; ?>"><?php echo $status_text; ?></span>
+          </div>
+          <div class="lokasi-info">
+            <div class="info-item">
+              <i class="fas fa-users"></i>
+              <span><?php echo $total_volunteer; ?> Volunteer</span>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-clock"></i>
+              <span>3 Bulan</span>
+            </div>
+            <div class="info-item">
+              <i class="fas fa-wave-square"></i>
+              <span><?php echo $magnitudo; ?></span>
+            </div>
+          </div>
+          <p>Bergabunglah sebagai volunteer untuk membantu masyarakat di <?php echo htmlspecialchars($lokasi); ?> dalam menghadapi potensi tsunami dan pemulihan pasca bencana.</p>
+          <p><small><strong>Tanggal Kejadian:</strong> <?php echo $tanggal; ?></small></p>
+          
+          <?php if ($tersedia) { ?>
+            <a href="pendaftaran_volunteer.php?id_kejadian=<?php echo $id_kejadian; ?>" class="volunteer-btn">
+              <i class="fas fa-user-plus"></i>
+              Daftar Sekarang
+            </a>
+          <?php } else { ?>
+            <button class="volunteer-btn" disabled>
+              <i class="fas fa-times"></i>
+              Pendaftaran Ditutup
+            </button>
+          <?php } ?>
+        </div>
+        
+        <?php
+            $index++;
+          }
+        } else {
+        ?>
+          <div class="lokasi-item" style="grid-column: 1 / -1; text-align: center;">
+            <i class="fas fa-info-circle" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
+            <h4>Belum Ada Lokasi Volunteer</h4>
+            <p>Belum ada kejadian tsunami yang membutuhkan volunteer saat ini.</p>
+          </div>
+        <?php } ?>
       </div>
     </section>
   </main>
@@ -707,7 +809,6 @@
     const closeNotifBtn = document.getElementById("closeNotifBtn");
     const backToTop = document.getElementById("backToTop");
     const scrollProgress = document.getElementById("scrollProgress");
-    const lokasiListDiv = document.getElementById("lokasiList");
 
     // Scroll Effects
     window.addEventListener("scroll", () => {
@@ -764,260 +865,7 @@
         navbar.classList.remove("notif-active");
         hero.classList.remove("notif-active");
       }
-      
-      // Load volunteer data
-      loadVolunteerData();
-      startDataPolling();
     });
-
-    // ===== VOLUNTEER FUNCTIONALITY - TERINTEGRASI DENGAN ADMIN ====
-    function loadVolunteerData() {
-        console.log('📥 Memuat data volunteer dari localStorage...');
-        
-        const incidentsData = JSON.parse(localStorage.getItem('userIncidentsData')) || [];
-        const statsData = JSON.parse(localStorage.getItem('userIncidentsStats')) || {};
-        
-        console.log('📊 Data yang ditemukan:', {
-            incidentsCount: incidentsData.length,
-            stats: statsData
-        });
-        
-        // Jika tidak ada data dari admin, gunakan data default
-        if (incidentsData.length === 0) {
-            console.log('ℹ️ Tidak ada data dari admin, menggunakan data default');
-            setDefaultVolunteerData();
-            return;
-        }
-        
-        // Format data untuk volunteer
-        const volunteerData = incidentsData.map(incident => {
-            // Ekstrak status dari HTML string
-            let status = "Selesai";
-            let tersedia = false;
-            let kebutuhan = "0 Volunteer";
-            let durasi = "Selesai";
-            
-            if (incident.status.includes('status-aktif')) {
-                status = "Aktif";
-                tersedia = true;
-                kebutuhan = "15 Volunteer";
-                durasi = "3 Bulan";
-            } else if (incident.status.includes('status-pemantauan')) {
-                status = "Dalam Pemantauan";
-                tersedia = true;
-                kebutuhan = "10 Volunteer";
-                durasi = "2 Bulan";
-            }
-            
-            return {
-                lokasi: incident.lokasi,
-                status: status,
-                kebutuhan: kebutuhan,
-                durasi: durasi,
-                tersedia: tersedia,
-                magnitudo: incident.magnitudo,
-                tanggal: incident.tanggal
-            };
-        });
-        
-        // Update tampilan
-        updateVolunteerDisplay(volunteerData, statsData);
-    }
-
-    function setDefaultVolunteerData() {
-        // Data default jika tidak ada data dari admin
-        const defaultVolunteerData = [
-            { 
-                lokasi: "Palu, Sulawesi Tengah", 
-                status: "Aktif",
-                kebutuhan: "15 Volunteer",
-                durasi: "3 Bulan",
-                tersedia: true,
-                magnitudo: "6.9 SR",
-                tanggal: "10 Nov 2025"
-            },
-            { 
-                lokasi: "Mentawai, Sumatera Barat", 
-                status: "Dalam Pemantauan", 
-                kebutuhan: "10 Volunteer",
-                durasi: "2 Bulan",
-                tersedia: true,
-                magnitudo: "7.1 SR",
-                tanggal: "05 Nov 2025"
-            },
-            { 
-                lokasi: "Aceh Besar, NAD", 
-                status: "Selesai",
-                kebutuhan: "0 Volunteer",
-                durasi: "Selesai",
-                tersedia: false,
-                magnitudo: "6.8 SR",
-                tanggal: "30 Okt 2025"
-            },
-            { 
-                lokasi: "Bengkulu", 
-                status: "Selesai",
-                kebutuhan: "0 Volunteer",
-                durasi: "Selesai",
-                tersedia: false,
-                magnitudo: "6.5 SR",
-                tanggal: "25 Okt 2025"
-            },
-            { 
-                lokasi: "Selat Sunda", 
-                status: "Selesai",
-                kebutuhan: "0 Volunteer",
-                durasi: "Selesai",
-                tersedia: false,
-                magnitudo: "6.7 SR",
-                tanggal: "18 Okt 2025"
-            }
-        ];
-        
-        const defaultStats = {
-            total: 5,
-            active: 1,
-            monitoring: 1,
-            completed: 3
-        };
-        
-        updateVolunteerDisplay(defaultVolunteerData, defaultStats);
-    }
-
-    function updateVolunteerDisplay(volunteerData, statsData) {
-        console.log('🔄 Memperbarui tampilan volunteer dengan', volunteerData.length, 'data');
-        
-        // Kosongkan container
-        lokasiListDiv.innerHTML = '';
-        
-        if (volunteerData.length === 0) {
-            lokasiListDiv.innerHTML = `
-                <div class="lokasi-item" style="grid-column: 1 / -1; text-align: center;">
-                    <i class="fas fa-info-circle" style="font-size: 48px; color: #ccc; margin-bottom: 15px;"></i>
-                    <h4>Belum Ada Lokasi Volunteer</h4>
-                    <p>Belum ada kejadian tsunami yang membutuhkan volunteer saat ini.</p>
-                </div>
-            `;
-            return;
-        }
-        
-        // Tampilkan semua data volunteer
-        volunteerData.forEach((item, index) => {
-            const div = createLocationItem(item, index);
-            lokasiListDiv.appendChild(div);
-        });
-        
-        // Update statistik jika diperlukan
-        updateVolunteerStats(statsData);
-    }
-
-    function createLocationItem(item, index) {
-        const div = document.createElement("div");
-        div.classList.add("lokasi-item");
-        div.setAttribute("data-aos", "zoom-in");
-        div.setAttribute("data-aos-delay", (index * 100).toString());
-
-        if (item.tersedia) {
-            div.innerHTML = `
-                <div class="lokasi-header">
-                    <h4>${item.lokasi}</h4>
-                    <span class="status-badge status-available">${item.status}</span>
-                </div>
-                <div class="lokasi-info">
-                    <div class="info-item">
-                        <i class="fas fa-users"></i>
-                        <span>${item.kebutuhan}</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-clock"></i>
-                        <span>${item.durasi}</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-wave-square"></i>
-                        <span>${item.magnitudo}</span>
-                    </div>
-                </div>
-                <p>Bergabunglah sebagai volunteer untuk membantu masyarakat di ${item.lokasi} dalam menghadapi potensi tsunami.</p>
-                <p><small><strong>Tanggal Kejadian:</strong> ${item.tanggal}</small></p>
-                <a href="pendaftaran_volunteer.html?lokasi=${encodeURIComponent(item.lokasi)}" class="volunteer-btn">
-                    <i class="fas fa-user-plus"></i>
-                    Daftar Sekarang
-                </a>
-            `;
-        } else {
-            div.innerHTML = `
-                <div class="lokasi-header">
-                    <h4>${item.lokasi}</h4>
-                    <span class="status-badge status-closed">${item.status}</span>
-                </div>
-                <div class="lokasi-info">
-                    <div class="info-item">
-                        <i class="fas fa-users"></i>
-                        <span>${item.kebutuhan}</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-clock"></i>
-                        <span>${item.durasi}</span>
-                    </div>
-                    <div class="info-item">
-                        <i class="fas fa-wave-square"></i>
-                        <span>${item.magnitudo}</span>
-                    </div>
-                </div>
-                <p>Program volunteer di ${item.lokasi} sudah selesai. Terima kasih atas partisipasinya.</p>
-                <p><small><strong>Tanggal Kejadian:</strong> ${item.tanggal}</small></p>
-                <button class="volunteer-btn" disabled>
-                    <i class="fas fa-times"></i>
-                    Pendaftaran Ditutup
-                </button>
-            `;
-        }
-        return div;
-    }
-
-    function updateVolunteerStats(statsData) {
-        console.log('📈 Statistik volunteer:', statsData);
-        // Anda bisa menambahkan update statistik di sini jika diperlukan
-    }
-
-    // === AUTO REFRESH DATA ===
-    function startDataPolling() {
-        // Cek perubahan data setiap 3 detik
-        setInterval(() => {
-            const currentData = JSON.parse(localStorage.getItem('userIncidentsData') || '[]');
-            const lastData = window.lastVolunteerData || [];
-            
-            // Jika ada perubahan data, refresh
-            if (JSON.stringify(currentData) !== JSON.stringify(lastData)) {
-                console.log('🔄 Data volunteer berubah, melakukan refresh...');
-                loadVolunteerData();
-                window.lastVolunteerData = currentData;
-            }
-        }, 3000);
-    }
-
-    // === FUNGSI UNTUK SIMPAN DATA VOLUNTEER ===
-    function simpanDataVolunteer() {
-        const volunteerData = JSON.parse(localStorage.getItem('userIncidentsData')) || [];
-        const data = volunteerData.map(item => {
-            let status = "Selesai";
-            if (item.status.includes('status-aktif')) status = "Aktif";
-            else if (item.status.includes('status-pemantauan')) status = "Pemantauan";
-            
-            return { 
-                lokasi: item.lokasi, 
-                status: status, 
-                magnitudo: item.magnitudo,
-                tanggal: item.tanggal,
-                waktu: new Date().toISOString() 
-            };
-        });
-        
-        localStorage.setItem("volunteerTsunamiData", JSON.stringify(data));
-    }
-
-    // Simpan data volunteer saat halaman dimuat
-    simpanDataVolunteer();
   </script>
 </body>
 </html>
