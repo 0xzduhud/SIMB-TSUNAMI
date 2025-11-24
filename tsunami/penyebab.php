@@ -678,12 +678,12 @@
       <img src="img/tsunamelogo.png" alt="Tsuname Logo" />
     </div>
     <nav class="navbar-links" aria-label="Menu utama">
-      <a href="index_tsunami_user.html">Beranda</a>
-      <a href="riwayat.html">Riwayat</a>
-      <a href="maps2.html">Pantau</a>
-      <a href="artikel.html">Artikel</a>
-      <a href="volunteer.html">Volunter</a>
-      <a href="about.html">Tentang</a>
+      <a href="index_tsunami_user.php">Beranda</a>
+      <a href="riwayat.php">Riwayat</a>
+      <a href="maps2.php">Pantau</a>
+      <a href="artikel.php">Artikel</a>
+      <a href="volunteer.php">Volunter</a>
+      <a href="about.php">Tentang</a>
     </nav>
   </header>
 
