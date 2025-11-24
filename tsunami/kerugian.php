@@ -772,12 +772,12 @@
       <img src="img/tsunamelogo.png" alt="Tsuname Logo" />
     </div>
     <nav class="navbar-links">
-      <a href="index_tsunami_user.html">Beranda</a>
-      <a href="riwayat.html">Riwayat</a>
-      <a href="maps2.html" style="color: #a9d6ff;">Pantau</a>
-      <a href="artikel.html">Artikel</a>
-      <a href="volunteer.html">Volunteer</a>
-      <a href="about.html">Tentang</a>
+      <a href="index_tsunami_user.php">Beranda</a>
+      <a href="riwayat.php">Riwayat</a>
+      <a href="maps2.php" style="color: #a9d6ff;">Pantau</a>
+      <a href="artikel.php">Artikel</a>
+      <a href="volunteer.php">Volunteer</a>
+      <a href="about.php">Tentang</a>
     </nav>
   </header>
 
