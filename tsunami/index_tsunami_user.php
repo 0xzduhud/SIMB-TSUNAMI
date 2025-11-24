@@ -564,11 +564,11 @@
     </div>
     <nav class="navbar-links" aria-label="Menu utama">
       <a href="#home">Beranda</a>
-      <a href="riwayat.html">Riwayat</a>
-      <a href="maps2.html">Pantau</a>
-      <a href="artikel.html">Artikel</a>
-      <a href="volunteer.html">Volunter</a>
-      <a href="about.html">Tentang</a>
+      <a href="riwayat.php">Riwayat</a>
+      <a href="maps2.php">Pantau</a>
+      <a href="artikel.php">Artikel</a>
+      <a href="volunteer.php">Volunter</a>
+      <a href="about.php">Tentang</a>
     </nav>
   </header>
 
@@ -611,7 +611,7 @@
           <span class="nav-card-icon"><h3>Pengertian Tsunami</h3></span>
           <p>Pelajari definisi ilmiah, etimologi, dan karakteristik gelombang tsunami serta contoh kejadian di Indonesia.</p>
         </div>
-        <button class="nav-card-btn">Pelajari Lebih Lanjut</button>
+        <a href="pengertian.php"><button class="nav-card-btn">Pelajari Lebih Lanjut</button></a>
       </div>
 
       <!-- Penyebab Tsunami -->
@@ -620,7 +620,7 @@
           <span class="nav-card-icon"><h3>Penyebab Tsunami</h3></span>
           <p>Ketahui berbagai faktor pemicu tsunami seperti gempa bumi bawah laut, longsor, letusan gunung berapi, dan lainnya.</p>
         </div>
-        <button class="nav-card-btn">Pelajari Lebih Lanjut</button>
+        <a href="penyebab.php"><button class="nav-card-btn">Pelajari Lebih Lanjut</button></a>
       </div>
 
       <!-- Mitigasi & Penanggulangan Tsunami -->
@@ -629,7 +629,7 @@
           <span class="nav-card-icon"><h3>Mitigasi & Penanggulangan</h3></span>
           <p>Pahami upaya pencegahan dan penanganan tsunami, termasuk langkah-langkah keselamatan sebelum, saat, dan setelah bencana.</p>
         </div>
-        <button class="nav-card-btn">Pelajari Lebih Lanjut</button>
+        <a href="mitigasi-penanggulangan.php"><button class="nav-card-btn">Pelajari Lebih Lanjut</button></a>
       </div>
 
       <!-- Dampak & Kerugian -->
@@ -638,7 +638,7 @@
           <span class="nav-card-icon"><h3>Dampak & Kerugian</h3></span>
           <p>Ketahui dampak langsung dan tidak langsung tsunami terhadap kehidupan, ekonomi, dan lingkungan.</p>
         </div>
-        <button class="nav-card-btn">Pelajari Lebih Lanjut</button>
+        <a href="kerugian.php"><button class="nav-card-btn">Pelajari Lebih Lanjut</button></a>
       </div>
     </div>
   </section>
