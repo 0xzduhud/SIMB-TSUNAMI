@@ -1,9 +1,55 @@
+<?php
+include "koneksi.php";
+
+// Ambil id_kejadian dari URL
+$id_kejadian = isset($_GET['id_kejadian']) ? intval($_GET['id_kejadian']) : 0;
+
+// Query untuk mendapatkan data kejadian
+$query = "SELECT * FROM kejadian WHERE id_kejadian = $id_kejadian";
+$result = mysqli_query($conn, $query);
+$kejadian = mysqli_fetch_assoc($result);
+
+// Jika id_kejadian tidak valid, redirect ke volunteer.php
+if (!$kejadian) {
+  header("Location: volunteer.php");
+  exit();
+}
+
+// Proses form submission
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $nama = mysqli_real_escape_string($conn, $_POST['nama']);
+  $email = mysqli_real_escape_string($conn, $_POST['email']);
+  $nomor_telpon = mysqli_real_escape_string($conn, $_POST['telepon']);
+  $alamat_lengkap = mysqli_real_escape_string($conn, $_POST['alamat']);
+  $usia = intval($_POST['usia']);
+  $alasan = mysqli_real_escape_string($conn, $_POST['alasan']);
+  $pengalaman = mysqli_real_escape_string($conn, $_POST['pengalaman']);
+  
+  // Validasi usia minimal 18 tahun
+  if ($usia < 18) {
+    $error_message = "Maaf, usia minimal untuk menjadi volunteer adalah 18 tahun.";
+  } else {
+    // Insert data ke database
+    $query_insert = "INSERT INTO volunteer (nama, email, nomor_telpon, id_kejadian, alamat_lengkap, usia, alasan, pengalaman) 
+                     VALUES ('$nama', '$email', '$nomor_telpon', $id_kejadian, '$alamat_lengkap', $usia, '$alasan', '$pengalaman')";
+    
+    if (mysqli_query($conn, $query_insert)) {
+      $success_message = "Terima kasih! Pendaftaran volunteer Anda telah berhasil dikirim. Tim kami akan menghubungi Anda dalam 1-2 hari kerja.";
+      // Redirect setelah 2 detik
+      header("refresh:2;url=volunteer.php");
+    } else {
+      $error_message = "Terjadi kesalahan saat menyimpan data. Silakan coba lagi.";
+    }
+  }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Waver — Pendaftaran Volunteer</title>
+  <title>Waver – Pendaftaran Volunteer</title>
 
   <!-- FONT & LIBRARY -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet" />
@@ -289,32 +335,32 @@
     }
 
     /* Rata tengah untuk header form volunteer - posisi lebih atas */
-.volunteer-form-section {
-  padding-top: 20px; /* Kurangi padding atas */
-}
+    .volunteer-form-section {
+      padding-top: 20px;
+    }
 
-.volunteer-form-section h2 {
-  text-align: center;
-  display: block;
-  width: 100%;
-  margin-bottom: 10px; /* Kurangi jarak dengan paragraf */
-  margin-top: 0; /* Pastikan tidak ada margin atas */
-}
+    .volunteer-form-section h2 {
+      text-align: center;
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+      margin-top: 0;
+    }
 
-.volunteer-form-section h2::after {
-  left: 50%;
-  transform: translateX(-50%);
-}
+    .volunteer-form-section h2::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
 
-.volunteer-form-section > p {
-  text-align: center;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-  margin-bottom: 100px; /* Sesuaikan jarak dengan form */
-  margin-top: 0;
-}
+    .volunteer-form-section > p {
+      text-align: center;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      display: block;
+      margin-bottom: 100px;
+      margin-top: 0;
+    }
 
     .volunteer-form input,
     .volunteer-form textarea,
@@ -392,6 +438,26 @@
       color: white;
       transform: translateY(-3px);
       box-shadow: 0 10px 25px rgba(0, 87, 255, 0.2);
+    }
+
+    /* Alert Messages */
+    .alert {
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-weight: 600;
+    }
+
+    .alert-success {
+      background: rgba(40, 167, 69, 0.1);
+      color: var(--success);
+      border: 2px solid var(--success);
+    }
+
+    .alert-danger {
+      background: rgba(220, 53, 69, 0.1);
+      color: var(--danger);
+      border: 2px solid var(--danger);
     }
 
     /* ===== FOOTER ===== */
@@ -546,7 +612,7 @@
 
   <!-- ===== NOTIFICATION BAR ===== -->
   <div id="notification" role="alert" aria-live="assertive">
-    ⚠️ PERINGATAN DARURAT! Tsunami terdeteksi — Perkiraan tiba dalam 20 menit di Palu!
+    ⚠️ PERINGATAN DARURAT! Tsunami terdeteksi – Perkiraan tiba dalam 20 menit di Palu!
     <button class="close-btn" id="closeNotifBtn" aria-label="Tutup notifikasi">×</button>
   </div>
 
@@ -560,7 +626,7 @@
       <a href="riwayat.html">Riwayat</a>
       <a href="maps2.html">Pantau</a>
       <a href="artikel.html">Artikel</a>
-      <a href="volunteer.html">Volunter</a>
+      <a href="volunteer.php">Volunter</a>
       <a href="about.html">Tentang</a>
     </nav>
   </header>
@@ -575,51 +641,66 @@
 
   <!-- ===== MAIN CONTENT ===== -->
   <main>
+    <section class="volunteer-form-section" data-aos="fade-up">
+      <h2>Form Pendaftaran Volunteer</h2>
+      <p>Lengkapi data diri Anda untuk mendaftar sebagai volunteer di <?php echo htmlspecialchars($kejadian['lokasi']); ?></p>
 
+      <?php if (isset($success_message)) { ?>
+        <div class="alert alert-success">
+          <i class="fas fa-check-circle"></i> <?php echo $success_message; ?>
+        </div>
+      <?php } ?>
 
-      <form class="volunteer-form" id="volunteerForm">
+      <?php if (isset($error_message)) { ?>
+        <div class="alert alert-danger">
+          <i class="fas fa-exclamation-circle"></i> <?php echo $error_message; ?>
+        </div>
+      <?php } ?>
+
+      <form class="volunteer-form" id="volunteerForm" method="POST" action="">
         <div class="form-group">
-          <label for="nama">Nama Lengkap</label>
-          <input type="text" id="nama" placeholder="Masukkan nama lengkap" required />
+          <label for="nama">Nama Lengkap <span style="color: red;">*</span></label>
+          <input type="text" id="nama" name="nama" placeholder="Masukkan nama lengkap" required />
         </div>
         
         <div class="form-group">
-          <label for="email">Email</label>
-          <input type="email" id="email" placeholder="Masukkan alamat email" required />
+          <label for="email">Email <span style="color: red;">*</span></label>
+          <input type="email" id="email" name="email" placeholder="Masukkan alamat email" required />
         </div>
         
         <div class="form-group">
-          <label for="telepon">Nomor Telepon</label>
-          <input type="text" id="telepon" placeholder="Masukkan nomor telepon" required />
+          <label for="telepon">Nomor Telepon <span style="color: red;">*</span></label>
+          <input type="text" id="telepon" name="telepon" placeholder="Masukkan nomor telepon" required />
         </div>
         
         <div class="form-group">
           <label for="lokasi">Lokasi yang Dipilih</label>
-          <input type="text" id="lokasi" readonly />
+          <input type="text" id="lokasi" name="lokasi" value="<?php echo htmlspecialchars($kejadian['lokasi']); ?>" readonly style="background-color: #f0f0f0; cursor: not-allowed;" />
         </div>
         
         <div class="form-group">
-          <label for="alamat">Alamat Lengkap</label>
-          <textarea id="alamat" rows="3" placeholder="Masukkan alamat lengkap Anda" required></textarea>
+          <label for="alamat">Alamat Lengkap <span style="color: red;">*</span></label>
+          <textarea id="alamat" name="alamat" rows="3" placeholder="Masukkan alamat lengkap Anda" required></textarea>
         </div>
         
         <div class="form-group">
-          <label for="usia">Usia</label>
-          <input type="number" id="usia" placeholder="Masukkan usia Anda" min="18" max="65" required />
+          <label for="usia">Usia <span style="color: red;">*</span></label>
+          <input type="number" id="usia" name="usia" placeholder="Masukkan usia Anda (minimal 18 tahun)" min="18" max="65" required />
+          <small style="color: #666; font-size: 14px;"><i class="fas fa-info-circle"></i> Minimal usia 18 tahun</small>
         </div>
         
         <div class="form-group">
-          <label for="alasan">Alasan Menjadi Volunteer</label>
-          <textarea id="alasan" rows="5" placeholder="Ceritakan mengapa Anda ingin menjadi volunteer Waver..." required></textarea>
+          <label for="alasan">Alasan Menjadi Volunteer <span style="color: red;">*</span></label>
+          <textarea id="alasan" name="alasan" rows="5" placeholder="Ceritakan mengapa Anda ingin menjadi volunteer Waver..." required></textarea>
         </div>
         
         <div class="form-group">
           <label for="pengalaman">Pengalaman Terkait (opsional)</label>
-          <textarea id="pengalaman" rows="3" placeholder="Pengalaman dalam penanggulangan bencana, pertolongan pertama, dll."></textarea>
+          <textarea id="pengalaman" name="pengalaman" rows="3" placeholder="Pengalaman dalam penanggulangan bencana, pertolongan pertama, dll."></textarea>
         </div>
         
         <div class="button-container">
-          <a href="volunteer.html" class="back-btn">
+          <a href="volunteer.php" class="back-btn">
             <i class="fas fa-arrow-left"></i>
             Kembali
           </a>
@@ -659,7 +740,6 @@
     const backToTop = document.getElementById("backToTop");
     const scrollProgress = document.getElementById("scrollProgress");
     const volunteerForm = document.getElementById("volunteerForm");
-    const lokasiInput = document.getElementById("lokasi");
 
     // Scroll Effects
     window.addEventListener("scroll", () => {
@@ -716,44 +796,17 @@
         navbar.classList.remove("notif-active");
         hero.classList.remove("notif-active");
       }
-
-      // Ambil parameter lokasi dari URL
-      const urlParams = new URLSearchParams(window.location.search);
-      const lokasi = urlParams.get('lokasi');
-      if (lokasi) {
-        lokasiInput.value = decodeURIComponent(lokasi);
-      }
     });
 
-    // Handle form submission
+    // Validasi usia di sisi client
     volunteerForm.addEventListener('submit', function(e) {
-      e.preventDefault();
+      const usia = parseInt(document.getElementById('usia').value);
       
-      // Simpan data volunteer ke localStorage
-      const formData = {
-        nama: document.getElementById('nama').value,
-        email: document.getElementById('email').value,
-        telepon: document.getElementById('telepon').value,
-        lokasi: document.getElementById('lokasi').value,
-        alamat: document.getElementById('alamat').value,
-        usia: document.getElementById('usia').value,
-        alasan: document.getElementById('alasan').value,
-        pengalaman: document.getElementById('pengalaman').value,
-        tanggalDaftar: new Date().toISOString()
-      };
-      
-      // Simpan ke localStorage
-      const existingVolunteers = JSON.parse(localStorage.getItem('volunteers')) || [];
-      existingVolunteers.push(formData);
-      localStorage.setItem('volunteers', JSON.stringify(existingVolunteers));
-      
-      alert('Terima kasih! Pendaftaran volunteer Anda telah berhasil dikirim. Tim kami akan menghubungi Anda dalam 1-2 hari kerja.');
-      this.reset();
-      
-      // Redirect kembali ke halaman volunteer setelah 2 detik
-      setTimeout(() => {
-        window.location.href = 'volunteer.html';
-      }, 2000);
+      if (usia < 18) {
+        e.preventDefault();
+        alert('Maaf, usia minimal untuk menjadi volunteer adalah 18 tahun.');
+        return false;
+      }
     });
   </script>
 </body>
