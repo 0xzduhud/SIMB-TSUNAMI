@@ -536,7 +536,7 @@
         <img src="img/tsunamelogo.png" alt="Tsuname Logo" />
       </div>
       <div class="navbar-links">
-        <a href="index_tsunami_user.html">Beranda</a>
+        <a href="index_tsunami_user.php">Beranda</a>
         <a href="riwayat.php">Riwayat</a>
         <a href="maps2.php" style="color: #a9d6ff;">Pantau</a>
         <a href="artikel.php">Artikel</a>
@@ -971,3 +971,4 @@
   </body>
 
 </html>
+
